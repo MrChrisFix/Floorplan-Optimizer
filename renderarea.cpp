@@ -1,5 +1,5 @@
 #include "renderarea.h"
-#include "ratextedit.h"
+#include "ralineedit.h"
 #include <string>
 #include <QPainter>
 
@@ -55,13 +55,13 @@ void RenderArea::resizeEvent(QResizeEvent * event)
         {
             if(boxes[0]->objectName() == "widthTextEdit")
             {
-                this->widthBox = (RATextEdit*)boxes[0];
-                this->heightBox = (RATextEdit*)boxes[1];
+                this->widthBox = (RALineEdit*)boxes[0];
+                this->heightBox = (RALineEdit*)boxes[1];
             }
             else
             {
-                this->widthBox = (RATextEdit*)boxes[1];
-                this->heightBox = (RATextEdit*)boxes[0];
+                this->widthBox = (RALineEdit*)boxes[1];
+                this->heightBox = (RALineEdit*)boxes[0];
             }
         }
     }

@@ -1,7 +1,7 @@
 #ifndef RENDERAREA_H
 #define RENDERAREA_H
 
-#include "qtextedit.h"
+#include "qlineedit.h"
 #include <QWidget>
 
 class RenderArea : public QWidget
@@ -11,7 +11,7 @@ private:
     float length, height;
     float drawLenght, drawHeight;
     float MAXDRAWSIZE;                  /// The maximal side size of the drawn rectangle
-    QTextEdit *widthBox, *heightBox;
+    QLineEdit *widthBox, *heightBox;
 
 public:
     explicit RenderArea(QWidget *parent = nullptr);

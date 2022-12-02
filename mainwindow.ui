@@ -71,7 +71,7 @@
         <height>300</height>
        </size>
       </property>
-      <widget class="RATextEdit" name="widthTextEdit">
+      <widget class="RALineEdit" name="widthTextEdit">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -86,6 +86,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="verticalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -93,7 +101,7 @@
         <enum>QAbstractScrollArea::AdjustIgnored</enum>
        </property>
       </widget>
-      <widget class="RATextEdit" name="heightTextEdit">
+      <widget class="RALineEdit" name="heightTextEdit">
        <property name="geometry">
         <rect>
          <x>370</x>
@@ -101,6 +109,14 @@
          <width>51</width>
          <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
        </property>
       </widget>
      </widget>
@@ -212,9 +228,9 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>RATextEdit</class>
+   <class>RALineEdit</class>
    <extends>QTextEdit</extends>
-   <header>ratextedit.h</header>
+   <header>ralineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

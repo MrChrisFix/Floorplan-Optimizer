@@ -23,8 +23,8 @@ set(PROJECT_SOURCES
         mainwindow.ui
         renderarea.h
         renderarea.cpp
-	ratextedit.h
-	ratextedit.cpp
+	ralineedit.h
+	ralineedit.cpp
         ${TS_FILES}
 )
 
