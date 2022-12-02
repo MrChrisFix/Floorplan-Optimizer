@@ -11,12 +11,11 @@ private:
     float length, height;
     float drawLenght, drawHeight;
     float MAXDRAWSIZE;                  /// The maximal side size of the drawn rectangle
+
     QLineEdit *widthBox, *heightBox;
 
 public:
     explicit RenderArea(QWidget *parent = nullptr);
-    void setLength(float newLength);
-    void setHeight(float newHeight);
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
@@ -27,7 +26,9 @@ protected:
 private:
     void reshapeAndDraw();
 
-signals:
+public slots:
+    void setLength(QString newLength);
+    void setHeight(QString newHeight);
 
 };
 

@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     this->setupTheWindow();
+    this->makeConnections();
 }
 
 MainWindow::~MainWindow()
@@ -21,4 +22,9 @@ void MainWindow::setupTheWindow()
     ui->typeRequirementsTree->setMaximumWidth(150);
 }
 
+void MainWindow::makeConnections()
+{
+    connect(ui->widthTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setLength(QString)));
+    connect(ui->heightTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setHeight(QString)));
+}
 

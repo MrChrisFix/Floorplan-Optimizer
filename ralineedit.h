@@ -20,7 +20,7 @@ protected:
 private:
 
 public slots:
-    void setValue();
+    //void onTextChange();
 
 };
 

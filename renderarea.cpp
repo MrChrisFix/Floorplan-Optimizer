@@ -9,34 +9,52 @@ RenderArea::RenderArea(QWidget *parent)
 {
     this->widthBox = nullptr;
     this->heightBox = nullptr;
+
+    this->length = 1;
+    this->height = 1;
+
 //    QHBoxLayout* para = (QHBoxLayout*)this->parent();
 //    auto size = std::min(para->sizeHint().height(), para->sizeHint().width());
 //    this->setMaximumSize(size, size);
 }
 
-void RenderArea::setLength(float newLength)
+void RenderArea::setLength(QString newLength)
 {
-    this->length = newLength;
+    if(!newLength.isEmpty())
+    {
+        this->length = newLength.toDouble();
+        this->reshapeAndDraw();
+    }
 }
 
-void RenderArea::setHeight(float newHeight)
+void RenderArea::setHeight(QString newHeight)
 {
-    this->height = newHeight;
+    if(!newHeight.isEmpty())
+    {
+        this->height = newHeight.toDouble();
+        this->reshapeAndDraw();
+    }
 }
 
 void RenderArea::reshapeAndDraw()
 {
-    auto relation = this->MAXDRAWSIZE / std::max(this->length, this->height);
-
-    this->drawLenght = relation * this->length;
-    this->drawHeight = relation * this->drawHeight;
-    update();
+    if(this->length > this->height)
+    {
+        this->drawLenght = MAXDRAWSIZE;
+        this->drawHeight = this->height * MAXDRAWSIZE / this->length;
+    }
+    else
+    {
+        this->drawLenght = this->length * MAXDRAWSIZE / this->height;
+        this->drawHeight = MAXDRAWSIZE;
+    }
+    this->repaint();
 }
 
 void RenderArea::paintEvent(QPaintEvent * /* event */)
 {
-    auto emptySpaceTop = (this->size().height() - this->MAXDRAWSIZE) / 2;
-    auto emptySpaceLeft = (this->size().width() - this->MAXDRAWSIZE) / 2;
+    auto emptySpaceTop = (this->size().height() - this->drawHeight) / 2;
+    auto emptySpaceLeft = (this->size().width() - this->drawLenght) / 2;
     QRect rect(emptySpaceLeft, emptySpaceTop, this->drawLenght, this->drawHeight); //left, top, width, height
     QPainter painter(this);
     painter.drawRect(rect);
@@ -45,8 +63,18 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 void RenderArea::resizeEvent(QResizeEvent * event)
 {
     this->MAXDRAWSIZE = std::min(this->geometry().height(), this->geometry().width())/2;
-    this->drawLenght = this->MAXDRAWSIZE;
-    this->drawHeight = this->MAXDRAWSIZE;
+    //auto relation = this->MAXDRAWSIZE / std::max(this->length, this->height);
+
+    if(this->length > this->height)
+    {
+        this->drawLenght = MAXDRAWSIZE;
+        this->drawHeight = this->height * MAXDRAWSIZE / this->length;
+    }
+    else
+    {
+        this->drawLenght = this->length * MAXDRAWSIZE / this->height;
+        this->drawHeight = MAXDRAWSIZE;
+    }
 
     if(this->widthBox == nullptr || this->heightBox == nullptr)
     {
