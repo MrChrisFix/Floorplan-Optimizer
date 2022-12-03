@@ -34,7 +34,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QTreeWidget" name="typesTree">
+     <widget class="TypeTreeWidget" name="typesTree">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -46,6 +46,9 @@
         <width>150</width>
         <height>16777215</height>
        </size>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
       </property>
       <column>
        <property name="text">
@@ -59,6 +62,36 @@
        <item>
         <property name="text">
          <string>VariantName</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Nowy element</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Nowy podelement</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Nowy element</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Nowy podelement</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nowy element</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nowy element</string>
         </property>
        </item>
       </item>
@@ -147,9 +180,29 @@
       </property>
       <column>
        <property name="text">
-        <string notr="true">1</string>
+        <string notr="true">Side requirements</string>
        </property>
       </column>
+      <item>
+       <property name="text">
+        <string>Up</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Left</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Down</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Right</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>
@@ -241,6 +294,11 @@
    <class>RALineEdit</class>
    <extends>QLineEdit</extends>
    <header>ralineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TypeTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>typetreewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

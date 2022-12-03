@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
         renderarea.cpp
 	ralineedit.h
 	ralineedit.cpp
+	typetreewidget.h
+	typetreewidget.cpp
         ${TS_FILES}
 )
 

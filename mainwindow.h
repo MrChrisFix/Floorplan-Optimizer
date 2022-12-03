@@ -11,11 +11,13 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+public slots:
 
 private:
     Ui::MainWindow *ui;
