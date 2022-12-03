@@ -59,6 +59,9 @@
        <property name="text">
         <string>TypeName</string>
        </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
        <item>
         <property name="text">
          <string>VariantName</string>
@@ -69,6 +72,9 @@
        <property name="text">
         <string>Nowy element</string>
        </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
        <item>
         <property name="text">
          <string>Nowy podelement</string>
@@ -78,6 +84,9 @@
       <item>
        <property name="text">
         <string>Nowy element</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
        <item>
         <property name="text">

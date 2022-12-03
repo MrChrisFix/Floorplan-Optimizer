@@ -21,9 +21,13 @@ private:
 private slots:
     void onContextMenu(const QPoint &point);
 
-    void renameSlot();
-    void deleteSlot();
-    void addVariantSlot();
+    void renameType();
+    void deleteTreeItem();
+    void addNewVariant();
+
+public slots:
+    void addNewType();
+    void addNewType(QString name);
 
 };
 
