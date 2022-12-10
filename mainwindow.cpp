@@ -26,5 +26,10 @@ void MainWindow::makeConnections()
 {
     connect(ui->widthTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setLength(QString)));
     connect(ui->heightTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setHeight(QString)));
+
+    //Menubar actions
     connect(ui->actionAdd_new_type, SIGNAL(triggered(bool)), ui->typesTree, SLOT(addNewType()));
+    connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
+
+    //TODO: import and export -> QFileDialog
 }
