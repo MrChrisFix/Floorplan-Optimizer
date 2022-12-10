@@ -12,6 +12,7 @@ private:
     QMenu* typeContextMenu;
 
     QString oldTypeNameHolder;
+    QTreeWidgetItem* lastSelected;
 
 public:
     TypeTreeWidget(QWidget *parent);
@@ -29,6 +30,8 @@ private slots:
     void checkNewName(QTreeWidgetItem* changedItem);
     void deleteTreeItem();
     void addNewVariant();
+
+    void SelectionChange();
 
 public slots:
     void addNewType();

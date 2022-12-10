@@ -50,6 +50,15 @@
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
+      <property name="allColumnsShowFocus">
+       <bool>false</bool>
+      </property>
       <column>
        <property name="text">
         <string notr="true">Types</string>
@@ -57,50 +66,50 @@
       </column>
       <item>
        <property name="text">
-        <string>TypeName</string>
+        <string>Type1</string>
        </property>
        <property name="flags">
         <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
        <item>
         <property name="text">
-         <string>VariantName</string>
+         <string>Variant1</string>
         </property>
        </item>
       </item>
       <item>
        <property name="text">
-        <string>Nowy element</string>
+        <string>Type2</string>
        </property>
        <property name="flags">
         <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
        <item>
         <property name="text">
-         <string>Nowy podelement</string>
+         <string>Variant1</string>
         </property>
        </item>
       </item>
       <item>
        <property name="text">
-        <string>Nowy element2</string>
+        <string>Type3</string>
        </property>
        <property name="flags">
         <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
        <item>
         <property name="text">
-         <string>Nowy podelement</string>
+         <string>Variant1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Nowy podelement</string>
+         <string>Variant2</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Nowy podelement</string>
+         <string>Variant3</string>
         </property>
        </item>
       </item>
@@ -126,7 +135,7 @@
       <widget class="RALineEdit" name="heightTextEdit">
        <property name="geometry">
         <rect>
-         <x>370</x>
+         <x>70</x>
          <y>180</y>
          <width>50</width>
          <height>40</height>

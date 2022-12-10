@@ -2,12 +2,15 @@
 #include "qmenu.h"
 #include "QToolTip"
 
+#include <QDebug>
+
 TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget{parent}
 {
     this->CreateContextMenus();
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenu(QPoint)));
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(checkNewName(QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(SelectionChange()));
 }
 
 TypeTreeWidget::~TypeTreeWidget()
@@ -40,6 +43,8 @@ void TypeTreeWidget::GetTypeVector()
 void TypeTreeWidget::CreateContextMenus()
 {
     //Types tree
+
+    //TODO: memory management (new -> delete)
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->typeContextMenu = new QMenu(this);
@@ -127,6 +132,27 @@ void TypeTreeWidget::onContextMenu(const QPoint &point)
 }
 
 
+void TypeTreeWidget::SelectionChange()
+{
+    //qInfo() << this->selectedItems().size();
+
+    if(this->selectedItems().size() == 0)
+    {
+        if(this->lastSelected != nullptr)
+            this->setCurrentItem(this->lastSelected);
+    }
+    else
+    {
+        if(selectedItems()[0] == lastSelected)
+        {
+            //TODO: add signal
+        }
+        else
+            this->lastSelected = this->selectedItems()[0];
+    }
+}
+
+
 void TypeTreeWidget::addNewType()
 {
     int number = this->topLevelItemCount() + 1;
@@ -138,7 +164,7 @@ void TypeTreeWidget::addNewType()
         if(this->findItems(name, Qt::MatchFlag::MatchExactly).size() != 0)
         {
             //The name already exists
-            QString name = QString("Type ") + QString::number(++number);
+            name = QString("Type ") + QString::number(++number);
             originalName = false;
         }
     }
@@ -147,6 +173,11 @@ void TypeTreeWidget::addNewType()
     QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
     newType->setFlags(newType->flags() | Qt::ItemIsEditable);
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
+
+
+    //Add inifial variant
+    QTreeWidgetItem* newVariant = new QTreeWidgetItem(newType, QStringList("Variant1"));
+    newType->addChild(newVariant);
 
 }
 
@@ -162,4 +193,8 @@ void TypeTreeWidget::addNewType(QString name)
 
     QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
+
+    //Add inifial variant
+    QTreeWidgetItem* newVariant = new QTreeWidgetItem(newType, QStringList("Variant1"));
+    newType->addChild(newVariant);
 }
