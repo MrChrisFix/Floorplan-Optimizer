@@ -11,6 +11,8 @@ private:
     QMenu* variantContextMenu;
     QMenu* typeContextMenu;
 
+    QString oldTypeNameHolder;
+
 public:
     TypeTreeWidget(QWidget *parent);
     ~TypeTreeWidget();

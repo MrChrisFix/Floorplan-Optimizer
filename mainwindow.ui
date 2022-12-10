@@ -83,7 +83,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Nowy element</string>
+        <string>Nowy element2</string>
        </property>
        <property name="flags">
         <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
@@ -95,12 +95,12 @@
        </item>
        <item>
         <property name="text">
-         <string>Nowy element</string>
+         <string>Nowy podelement</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Nowy element</string>
+         <string>Nowy podelement</string>
         </property>
        </item>
       </item>

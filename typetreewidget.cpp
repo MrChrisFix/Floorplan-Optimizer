@@ -63,40 +63,25 @@ void TypeTreeWidget::CreateContextMenus()
 
 void TypeTreeWidget::renameType()
 {
+    this->oldTypeNameHolder = this->selectedItems()[0]->text(0);
     this->editItem(this->selectedItems()[0], 0);
-
-
-
-//    for(int i=0; i< this->topLevelItemCount(); i++)
-//    {
-//        if(this->topLevelItem(i) == this->selectedItems()[0]) continue;
-
-//        if(this->topLevelItem(i)->text(0) == selectedItems()[0]->text(0))
-//        {
-//            //TODO: add a messagebox with the problem
-//            this->selectedItems()[0]->text(0) = oldName;
-//        }
-//    }
-
-    //TODO: disallow having the same names, as they are crucial to identify types
 }
 
 void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
 {
-    /*for(int i=0; i< this->topLevelItemCount(); i++)
+    //Trimm name
+    changedItem->setText(0, changedItem->text(0).trimmed());
+
+    //Find duplicates
+    for(int i=0; i< this->topLevelItemCount(); i++)
     {
         if(this->topLevelItem(i) == changedItem) continue;
 
         if(this->topLevelItem(i)->text(0) == changedItem->text(0))
         {
-            //TODO: add a messagebox/tooltip with the problem
-            QPoint point = QTreeWidget::visualItemRect(changedItem).bottomLeft();
-            QToolTip::showText(point, "Error");
-
-            this->editItem(selectedItems()[0], 0);
-            //changedItem->text(0) = "";
+            changedItem->setText(0, this->oldTypeNameHolder);
         }
-    }*/
+    }
 }
 
 void TypeTreeWidget::deleteTreeItem()
@@ -160,6 +145,7 @@ void TypeTreeWidget::addNewType()
     while(!originalName);
 
     QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
+    newType->setFlags(newType->flags() | Qt::ItemIsEditable);
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
 }
@@ -168,8 +154,10 @@ void TypeTreeWidget::addNewType(QString name)
 {
     if(this->findItems(name, Qt::MatchFlag::MatchExactly).size() != 0)
     {
-        return; //The name already exists
+        //The name already exists
         //TODO: add some toopip that the name isn't avaliable. Delegade overrive might be needed
+        this->addNewType();
+        return;
     }
 
     QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
