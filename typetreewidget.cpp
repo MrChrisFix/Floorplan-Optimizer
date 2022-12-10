@@ -1,11 +1,13 @@
 #include "typetreewidget.h"
 #include "qmenu.h"
+#include "QToolTip"
 
 TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget{parent}
 {
     this->CreateContextMenus();
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenu(QPoint)));
+    connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(checkNewName(QTreeWidgetItem*)));
 }
 
 TypeTreeWidget::~TypeTreeWidget()
@@ -14,6 +16,25 @@ TypeTreeWidget::~TypeTreeWidget()
         delete variantContextMenu;
     if(typeContextMenu != nullptr)
         delete typeContextMenu;
+}
+
+void TypeTreeWidget::GetTypeVector()
+{
+    for(int i=0; i< this->topLevelItemCount(); i++)
+    {
+        //Types
+        auto treeType = this->topLevelItem(i);
+        //treeType->text(0); <- typeName
+
+        for(int j = 0; j < treeType->childCount(); j++)
+        {
+            //Variants
+            auto treeVariant = treeType->child(i);
+
+            //Useless??
+            //Unless the treeVariant would have the size inside
+        }
+    }
 }
 
 void TypeTreeWidget::CreateContextMenus()
@@ -43,8 +64,41 @@ void TypeTreeWidget::CreateContextMenus()
 void TypeTreeWidget::renameType()
 {
     this->editItem(this->selectedItems()[0], 0);
+
+
+
+//    for(int i=0; i< this->topLevelItemCount(); i++)
+//    {
+//        if(this->topLevelItem(i) == this->selectedItems()[0]) continue;
+
+//        if(this->topLevelItem(i)->text(0) == selectedItems()[0]->text(0))
+//        {
+//            //TODO: add a messagebox with the problem
+//            this->selectedItems()[0]->text(0) = oldName;
+//        }
+//    }
+
     //TODO: disallow having the same names, as they are crucial to identify types
 }
+
+void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
+{
+    for(int i=0; i< this->topLevelItemCount(); i++)
+    {
+        if(this->topLevelItem(i) == changedItem) continue;
+
+        if(this->topLevelItem(i)->text(0) == changedItem->text(0))
+        {
+            //TODO: add a messagebox/tooltip with the problem
+            QPoint point = QTreeWidget::visualItemRect(changedItem).bottomLeft();
+            QToolTip::showText(point, "Error");
+
+            this->editItem(selectedItems()[0], 0);
+            //changedItem->text(0) = "";
+        }
+    }
+}
+
 void TypeTreeWidget::deleteTreeItem()
 {
     delete this->selectedItems()[0];

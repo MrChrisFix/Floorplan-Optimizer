@@ -12,10 +12,6 @@ RenderArea::RenderArea(QWidget *parent)
 
     this->length = 1;
     this->height = 1;
-
-//    QHBoxLayout* para = (QHBoxLayout*)this->parent();
-//    auto size = std::min(para->sizeHint().height(), para->sizeHint().width());
-//    this->setMaximumSize(size, size);
 }
 
 void RenderArea::setLength(QString newLength)

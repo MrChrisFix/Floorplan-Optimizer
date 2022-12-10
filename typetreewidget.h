@@ -15,6 +15,8 @@ public:
     TypeTreeWidget(QWidget *parent);
     ~TypeTreeWidget();
 
+    void GetTypeVector(); //TODO: return will be vector<Type*>
+
 private:
     void CreateContextMenus();
 
@@ -22,6 +24,7 @@ private slots:
     void onContextMenu(const QPoint &point);
 
     void renameType();
+    void checkNewName(QTreeWidgetItem* changedItem);
     void deleteTreeItem();
     void addNewVariant();
 
