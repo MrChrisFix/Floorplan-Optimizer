@@ -34,6 +34,9 @@ void RenderArea::setHeight(QString newHeight)
 
 void RenderArea::reshapeAndDraw()
 {
+    if(this->length < 1 || this->height < 1)
+        return;
+
     if(this->length > this->height)
     {
         this->drawLenght = MAXDRAWSIZE;
@@ -59,7 +62,6 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 void RenderArea::resizeEvent(QResizeEvent * event)
 {
     this->MAXDRAWSIZE = std::min(this->geometry().height(), this->geometry().width())/2;
-    //auto relation = this->MAXDRAWSIZE / std::max(this->length, this->height);
 
     if(this->length > this->height)
     {
