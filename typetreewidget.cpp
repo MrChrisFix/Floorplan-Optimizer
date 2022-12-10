@@ -83,7 +83,7 @@ void TypeTreeWidget::renameType()
 
 void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
 {
-    for(int i=0; i< this->topLevelItemCount(); i++)
+    /*for(int i=0; i< this->topLevelItemCount(); i++)
     {
         if(this->topLevelItem(i) == changedItem) continue;
 
@@ -96,7 +96,7 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
             this->editItem(selectedItems()[0], 0);
             //changedItem->text(0) = "";
         }
-    }
+    }*/
 }
 
 void TypeTreeWidget::deleteTreeItem()
