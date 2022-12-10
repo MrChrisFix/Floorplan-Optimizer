@@ -27,6 +27,16 @@ set(PROJECT_SOURCES
 	ralineedit.cpp
 	typetreewidget.h
 	typetreewidget.cpp
+	XML_Management/XMLFileManager.h
+	XML_Management/XMLFileManager.cpp
+	Algorithm/AlgorithmManager.h
+	Algorithm/AlgorithmManager.cpp
+	Algorithm/GraphNode.h
+	Algorithm/GraphNode.cpp
+	Algorithm/Type.h
+	Algorithm/Type.cpp
+	Algorithm/Variant.h
+	Algorithm/Variant.cpp
         ${TS_FILES}
 )
 
