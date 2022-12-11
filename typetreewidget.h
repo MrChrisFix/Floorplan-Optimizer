@@ -37,6 +37,9 @@ public slots:
     void addNewType();
     void addNewType(QString name);
 
+signals:
+    void variantChanged();
+
 };
 
 #endif // TYPETREEWIDGET_H

@@ -27,6 +27,10 @@ set(PROJECT_SOURCES
 	ralineedit.cpp
 	typetreewidget.h
 	typetreewidget.cpp
+	typeTreeItem.h
+	typeTreeItem.cpp
+	variantTreeItem.h
+	variantTreeItem.cpp
 	XML_Management/XMLFileManager.h
 	XML_Management/XMLFileManager.cpp
 	Algorithm/AlgorithmManager.h

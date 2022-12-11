@@ -74,10 +74,10 @@ void TypeTreeWidget::renameType()
 
 void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
 {
-    //Trimm name
+    //Trimming name
     changedItem->setText(0, changedItem->text(0).trimmed());
 
-    //Find duplicates
+    //Finding duplicates
     for(int i=0; i< this->topLevelItemCount(); i++)
     {
         if(this->topLevelItem(i) == changedItem) continue;
@@ -143,9 +143,15 @@ void TypeTreeWidget::SelectionChange()
     }
     else
     {
+        this->selectedItems()[0]->setExpanded(true);
+        //TODO: if type cheang selection to first variant
+        if(this->selectedItems()[0]->parent() == nullptr)
+            this->setCurrentItem(this->selectedItems()[0]->child(0));
+
+
         if(selectedItems()[0] == lastSelected)
         {
-            //TODO: add signal
+            emit variantChanged();
         }
         else
             this->lastSelected = this->selectedItems()[0];
