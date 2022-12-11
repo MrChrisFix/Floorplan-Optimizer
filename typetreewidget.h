@@ -1,6 +1,8 @@
 #ifndef TYPETREEWIDGET_H
 #define TYPETREEWIDGET_H
 
+#include "Algorithm/Variant.h"
+#include "variantTreeItem.h"
 #include <QTreeWidget>
 
 class TypeTreeWidget : public QTreeWidget
@@ -12,7 +14,7 @@ private:
     QMenu* typeContextMenu;
 
     QString oldTypeNameHolder;
-    QTreeWidgetItem* lastSelected;
+    VariantTreeItem* lastSelected;
 
 public:
     TypeTreeWidget(QWidget *parent);
@@ -28,7 +30,8 @@ private slots:
 
     void renameType();
     void checkNewName(QTreeWidgetItem* changedItem);
-    void deleteTreeItem();
+    void deleteTreeType();
+    void deleteTreeVariant();
     void addNewVariant();
 
     void SelectionChange();
@@ -38,7 +41,7 @@ public slots:
     void addNewType(QString name);
 
 signals:
-    void variantChanged();
+    void variantChanged(Alg::Variant*);
 
 };
 

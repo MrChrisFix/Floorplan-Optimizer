@@ -5,6 +5,11 @@ TypeTreeItem::TypeTreeItem(QTreeWidget *treeview, const QStringList &strings) : 
     this->repType = new Alg::Type(strings[0].toStdString());
 }
 
+TypeTreeItem::~TypeTreeItem()
+{
+    delete this->repType;
+}
+
 void TypeTreeItem::setType(Alg::Type* t)
 {
     this->repType = t;

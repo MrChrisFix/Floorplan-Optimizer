@@ -11,6 +11,7 @@ private:
 
 public:
     TypeTreeItem(QTreeWidget *treeview, const QStringList &strings);
+    ~TypeTreeItem();
 
     void setType(Alg::Type* t);
     Alg::Type* getType();

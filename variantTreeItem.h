@@ -12,6 +12,7 @@ private:
 
 public:
     VariantTreeItem(TypeTreeItem *parent, const QStringList &strings);
+    ~VariantTreeItem();
 
     void setVariant(Alg::Variant* var);
     Alg::Variant* variant();

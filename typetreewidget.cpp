@@ -1,6 +1,8 @@
 #include "typetreewidget.h"
 #include "qmenu.h"
 #include "QToolTip"
+#include "typeTreeItem.h"
+#include "variantTreeItem.h"
 
 #include <QDebug>
 
@@ -23,47 +25,52 @@ TypeTreeWidget::~TypeTreeWidget()
 
 void TypeTreeWidget::GetTypeVector()
 {
+    std::vector<Alg::Type*> vec;
     for(int i=0; i< this->topLevelItemCount(); i++)
     {
         //Types
-        auto treeType = this->topLevelItem(i);
+        TypeTreeItem* treeType = (TypeTreeItem*)this->topLevelItem(i);
         //treeType->text(0); <- typeName
 
         for(int j = 0; j < treeType->childCount(); j++)
         {
             //Variants
-            auto treeVariant = treeType->child(i);
+            VariantTreeItem* treeVariant = (VariantTreeItem*) treeType->child(i);
 
-            //Useless??
-            //Unless the treeVariant would have the size inside
         }
     }
 }
 
 void TypeTreeWidget::CreateContextMenus()
 {
-    //Types tree
-
     //TODO: memory management (new -> delete)
 
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->typeContextMenu = new QMenu(this);
     this->variantContextMenu = new QMenu(this);
 
-    QAction* renameAction = new QAction("Rename", this->typeContextMenu);
-    this->typeContextMenu->addAction(renameAction);
-    connect(renameAction, SIGNAL(triggered(bool)), this, SLOT(renameType()));
+    //Type actions
+    QAction* renameTypeAction = new QAction("Rename", this->typeContextMenu);
+    this->typeContextMenu->addAction(renameTypeAction);
+    connect(renameTypeAction, SIGNAL(triggered(bool)), this, SLOT(renameType()));
 
-    QAction* deleteAction = new QAction("Delete", this);
-    this->typeContextMenu->addAction(deleteAction);
-    this->variantContextMenu->addAction(deleteAction);
-    connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(deleteTreeItem()));
+    QAction* deleteTypeAction = new QAction("Delete", this->typeContextMenu);
+    this->typeContextMenu->addAction(deleteTypeAction);
+    connect(deleteTypeAction, SIGNAL(triggered(bool)), this, SLOT(deleteTreeType()));
 
     this->typeContextMenu->addSeparator();
 
     QAction* AddVariantAction = new QAction("Add new variant", this->typeContextMenu);
     this->typeContextMenu->addAction(AddVariantAction);
     connect(AddVariantAction, SIGNAL(triggered(bool)), this, SLOT(addNewVariant()));
+
+
+
+    //Variant actions
+    QAction* deleteVariantAction = new QAction("Delete", this->variantContextMenu);
+    this->variantContextMenu->addAction(deleteVariantAction);
+    connect(deleteVariantAction, SIGNAL(triggered(bool)), this, SLOT(deleteTreeVariant()));
+
 }
 
 void TypeTreeWidget::renameType()
@@ -89,22 +96,41 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
     }
 }
 
-void TypeTreeWidget::deleteTreeItem()
+void TypeTreeWidget::deleteTreeType()
 {
+    if(this->selectedItems()[0]->parent() != nullptr)
+        delete this->selectedItems()[0]->parent();
+    else
+        delete this->selectedItems()[0];
+    this->typeContextMenu->hide();
+}
+
+void TypeTreeWidget::deleteTreeVariant()
+{
+    if(this->selectedItems()[0]->parent()->childCount() < 2)
+        return; // Cannot delete the only existing variant of a type
+    //TODO: ^^^ Add maybe some tooltip?
     delete this->selectedItems()[0];
     this->typeContextMenu->hide();
 }
+
 void TypeTreeWidget::addNewVariant()
 {
-    int number = this->selectedItems()[0]->childCount() + 1;
+    QTreeWidgetItem* parentItem;
+    if(selectedItems()[0]->parent() != nullptr)
+        parentItem = selectedItems()[0]->parent();
+    else
+        parentItem = selectedItems()[0];
+
+    int number = parentItem->childCount() + 1;
     QString name = QString("Variant ") + QString::number(number);
     bool originalName = true;
     do
     {
         originalName = true;
-        for(int i =0; i< this->selectedItems()[0]->childCount(); i++)
+        for(int i =0; i< parentItem->childCount(); i++)
         {
-            if(this->selectedItems()[0]->child(i)->text(0) == name)
+            if(parentItem->child(i)->text(0) == name)
             {
                 name = QString("Variant ") + QString::number(++number);
                 originalName = false;
@@ -113,7 +139,7 @@ void TypeTreeWidget::addNewVariant()
         }
     }
     while(!originalName);
-    QTreeWidgetItem* newVariant = new QTreeWidgetItem(this->selectedItems()[0], QStringList(name));
+    VariantTreeItem* newVariant = new VariantTreeItem((TypeTreeItem*) parentItem, QStringList(name));
     this->selectedItems()[0]->addChild(newVariant);
 }
 
@@ -143,18 +169,24 @@ void TypeTreeWidget::SelectionChange()
     }
     else
     {
-        this->selectedItems()[0]->setExpanded(true);
-        //TODO: if type cheang selection to first variant
-        if(this->selectedItems()[0]->parent() == nullptr)
-            this->setCurrentItem(this->selectedItems()[0]->child(0));
 
+        QTreeWidgetItem* selected;
 
-        if(selectedItems()[0] == lastSelected)
+        if(this->selectedItems()[0]->parent() == nullptr) //Clicked on type
         {
-            emit variantChanged();
+            this->selectedItems()[0]->setExpanded(true);
+            selected = this->selectedItems()[0]->child(0);
         }
-        else
-            this->lastSelected = this->selectedItems()[0];
+        else //Clicked on variant
+        {
+            selected = this->selectedItems()[0];
+        }
+
+        this->lastSelected = (VariantTreeItem*) selected;
+        this->setCurrentItem(selected);
+        Alg::Variant* variant = ((VariantTreeItem*) selected)->variant();
+        emit variantChanged(variant);
+
     }
 }
 
@@ -176,13 +208,13 @@ void TypeTreeWidget::addNewType()
     }
     while(!originalName);
 
-    QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
+    TypeTreeItem* newType = new TypeTreeItem(this, QStringList(name));
     newType->setFlags(newType->flags() | Qt::ItemIsEditable);
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
 
     //Add inifial variant
-    QTreeWidgetItem* newVariant = new QTreeWidgetItem(newType, QStringList("Variant1"));
+    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
     newType->addChild(newVariant);
 
 }
@@ -192,15 +224,15 @@ void TypeTreeWidget::addNewType(QString name)
     if(this->findItems(name, Qt::MatchFlag::MatchExactly).size() != 0)
     {
         //The name already exists
-        //TODO: add some toopip that the name isn't avaliable. Delegade overrive might be needed
+        //TODO: add some toopip that the name isn't avaliable.
         this->addNewType();
         return;
     }
 
-    QTreeWidgetItem* newType = new QTreeWidgetItem(this, QStringList(name));
+    TypeTreeItem* newType = new TypeTreeItem(this, QStringList(name));
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
     //Add inifial variant
-    QTreeWidgetItem* newVariant = new QTreeWidgetItem(newType, QStringList("Variant1"));
+    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
     newType->addChild(newVariant);
 }
