@@ -23,22 +23,15 @@ TypeTreeWidget::~TypeTreeWidget()
         delete typeContextMenu;
 }
 
-void TypeTreeWidget::GetTypeVector()
+std::vector<Alg::Type*> TypeTreeWidget::GetTypeVector()
 {
     std::vector<Alg::Type*> vec;
     for(int i=0; i< this->topLevelItemCount(); i++)
     {
-        //Types
         TypeTreeItem* treeType = (TypeTreeItem*)this->topLevelItem(i);
-        //treeType->text(0); <- typeName
-
-        for(int j = 0; j < treeType->childCount(); j++)
-        {
-            //Variants
-            VariantTreeItem* treeVariant = (VariantTreeItem*) treeType->child(i);
-
-        }
+        vec.push_back(treeType->getType());
     }
+    return vec;
 }
 
 void TypeTreeWidget::CreateContextMenus()

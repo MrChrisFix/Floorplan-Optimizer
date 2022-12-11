@@ -20,7 +20,7 @@ public:
     TypeTreeWidget(QWidget *parent);
     ~TypeTreeWidget();
 
-    void GetTypeVector(); //TODO: return will be vector<Type*>
+    std::vector<Alg::Type*> GetTypeVector();
 
 private:
     void CreateContextMenus();
@@ -35,6 +35,8 @@ private slots:
     void addNewVariant();
 
     void SelectionChange();
+
+    //void AddRequirement(char side, QString typeName);
 
 public slots:
     void addNewType();
