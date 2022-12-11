@@ -2,6 +2,8 @@
 #include <vector>
 #include "Type.h"
 
+using namespace Alg;
+
 /**
  * The graphs G and H are used to calculate the height and width costs respectivly. 
 */

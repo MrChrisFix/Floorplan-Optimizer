@@ -30,7 +30,7 @@ XMLFileManager::~XMLFileManager()
 		delete this->XMLFile;
 }
 
-void XMLFileManager::SaveToXML(std::vector<Type*> types, std::string path)
+void XMLFileManager::SaveToXML(std::vector<Alg::Type*> types, std::string path)
 {
 	using namespace rapidxml;
 	xml_document<> document;
@@ -124,10 +124,10 @@ void XMLFileManager::SaveToXML(std::vector<Type*> types, std::string path)
 	file.close();
 }
 
-std::vector<Type*> XMLFileManager::ReadFromXML(std::string path)
+std::vector<Alg::Type*> XMLFileManager::ReadFromXML(std::string path)
 {
 	using namespace rapidxml;
-	std::vector<Type*> types;
+    std::vector<Alg::Type*> types;
 	
 	xml_document<> document;
 	try
@@ -146,11 +146,11 @@ std::vector<Type*> XMLFileManager::ReadFromXML(std::string path)
 		throw "XML node format is incorrect";
 	}
 
-	std::map <std::string,Type*> TypeByName;
+    std::map <std::string, Alg::Type*> TypeByName;
 
 	for (xml_node<>* typeNode = mainNode->first_node(); typeNode; typeNode = typeNode->next_sibling())
 	{
-		Type* newType = new Type(typeNode->first_attribute("name")->value());
+        Alg::Type* newType = new Alg::Type(typeNode->first_attribute("name")->value());
 		xml_node<>* variants = typeNode->first_node("Variants");
 
 		for (xml_node<>* variantNode = variants->first_node(); variantNode; variantNode = variantNode->next_sibling())
@@ -172,9 +172,9 @@ std::vector<Type*> XMLFileManager::ReadFromXML(std::string path)
 		for (xml_node<>* reqNode = requirements->first_node(); reqNode; reqNode = reqNode->next_sibling())
 		{
 			auto parTypeName = typeNode->first_attribute("name")->value();
-			Type* parType = TypeByName[parTypeName];
+            Alg::Type* parType = TypeByName[parTypeName];
 			auto childTypeName = reqNode->first_attribute("typeName")->value();
-			Type* childType = TypeByName[childTypeName];
+            Alg::Type* childType = TypeByName[childTypeName];
 
 			//TODO: check if type isn't nullptr
 			if (childType == nullptr)

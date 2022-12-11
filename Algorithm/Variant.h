@@ -1,19 +1,24 @@
 #pragma once
 
-class Type; //<- avoiding a #include deadlock
-
-class Variant
+namespace Alg
 {
-private:
+    class Type; //<- avoiding a #include deadlock
 
-	unsigned int height, width;
-	Type* type;
+    class Variant
+    {
+    private:
 
-public:
-	Variant(unsigned hei, unsigned wid, Type* parentType);
-	~Variant();
+        unsigned int height, width;
+        Type* type;
 
-	unsigned GetHeight();
-	unsigned GetWidth();
-	Type* GetType();
-};
+    public:
+        Variant(unsigned hei, unsigned wid, Type* parentType);
+        ~Variant();
+
+        unsigned GetHeight();
+        void SetHeight(unsigned hei);
+        unsigned GetWidth();
+        void SetWidth(unsigned wid);
+        Type* GetType();
+    };
+}

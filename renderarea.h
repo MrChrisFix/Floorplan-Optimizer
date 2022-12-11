@@ -1,6 +1,7 @@
 #ifndef RENDERAREA_H
 #define RENDERAREA_H
 
+#include "Algorithm/Variant.h"
 #include "qlineedit.h"
 #include <QWidget>
 
@@ -13,6 +14,8 @@ private:
     float MAXDRAWSIZE;                  /// The maximal side size of the drawn rectangle
 
     QLineEdit *widthBox, *heightBox;
+
+    Alg::Variant* currentVariant;
 
 public:
     explicit RenderArea(QWidget *parent = nullptr);
@@ -29,6 +32,8 @@ private:
 public slots:
     void setLength(QString newLength);
     void setHeight(QString newHeight);
+
+    void onVariantChange(Alg::Variant* variant);
 
 };
 

@@ -64,55 +64,6 @@
         <string notr="true">Types</string>
        </property>
       </column>
-      <item>
-       <property name="text">
-        <string>Type1</string>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-       </property>
-       <item>
-        <property name="text">
-         <string>Variant1</string>
-        </property>
-       </item>
-      </item>
-      <item>
-       <property name="text">
-        <string>Type2</string>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-       </property>
-       <item>
-        <property name="text">
-         <string>Variant1</string>
-        </property>
-       </item>
-      </item>
-      <item>
-       <property name="text">
-        <string>Type3</string>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-       </property>
-       <item>
-        <property name="text">
-         <string>Variant1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Variant2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Variant3</string>
-        </property>
-       </item>
-      </item>
      </widget>
     </item>
     <item>

@@ -6,6 +6,8 @@
 #include "GraphNode.h"
 #include <thread>
 
+using namespace Alg;
+
 class AlgorithmManager
 {
 private:

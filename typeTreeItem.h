@@ -7,13 +7,13 @@
 class TypeTreeItem : public QTreeWidgetItem
 {
 private:
-    Alg::Type* repType; ///Represemnting Type object
+    Alg::Type* repType; ///Representing Type object
 
 public:
-    TypeTreeItem(QTreeWidgetItem *parent, const QStringList &strings);
+    TypeTreeItem(QTreeWidget *treeview, const QStringList &strings);
 
     void setType(Alg::Type* t);
-    Alg::Type* type();
+    Alg::Type* getType();
 };
 
 #endif // TYPETREEITEM_H

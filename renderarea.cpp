@@ -9,6 +9,7 @@ RenderArea::RenderArea(QWidget *parent)
 {
     this->widthBox = nullptr;
     this->heightBox = nullptr;
+    this->currentVariant = nullptr;
 
     this->length = 1;
     this->height = 1;
@@ -18,7 +19,9 @@ void RenderArea::setLength(QString newLength)
 {
     if(!newLength.isEmpty())
     {
-        this->length = newLength.toDouble();
+        this->length = newLength.toUInt();
+        if(currentVariant != nullptr)
+            this->currentVariant->SetWidth(newLength.toUInt());
         this->reshapeAndDraw();
     }
 }
@@ -27,9 +30,22 @@ void RenderArea::setHeight(QString newHeight)
 {
     if(!newHeight.isEmpty())
     {
-        this->height = newHeight.toDouble();
+        this->height = newHeight.toUInt();
+        if(currentVariant != nullptr)
+            this->currentVariant->SetHeight(newHeight.toUInt());
         this->reshapeAndDraw();
     }
+}
+
+void RenderArea::onVariantChange(Alg::Variant* variant)
+{
+    this->currentVariant = variant;
+    this->height = variant->GetHeight();
+    this->length = variant->GetWidth();
+    this->heightBox->setText(QString::number(this->height));
+    this->widthBox->setText(QString::number(this->length));
+
+    this->reshapeAndDraw();
 }
 
 void RenderArea::reshapeAndDraw()

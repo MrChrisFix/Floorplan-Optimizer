@@ -1,15 +1,15 @@
 #include "typeTreeItem.h"
 
-TypeTreeItem::TypeTreeItem(QTreeWidgetItem *parent, const QStringList &strings) : QTreeWidgetItem(parent, strings)
+TypeTreeItem::TypeTreeItem(QTreeWidget *treeview, const QStringList &strings) : QTreeWidgetItem(treeview, strings)
 {
-
+    this->repType = new Alg::Type(strings[0].toStdString());
 }
 
 void TypeTreeItem::setType(Alg::Type* t)
 {
     this->repType = t;
 }
-Alg::Type* TypeTreeItem::type()
+Alg::Type* TypeTreeItem::getType()
 {
     return this->repType;
 }

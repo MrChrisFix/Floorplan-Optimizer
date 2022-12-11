@@ -1,16 +1,17 @@
 #include "variantTreeItem.h"
 
-variantTreeItem::variantTreeItem(QTreeWidgetItem *parent, const QStringList &strings) : QTreeWidgetItem(parent, strings)
+VariantTreeItem::VariantTreeItem(TypeTreeItem *parent, const QStringList &strings) : QTreeWidgetItem(parent, strings)
 {
-
+    Alg::Type* parentType = parent->getType();
+    this->repVariant = new Alg::Variant(1,1, parentType);
 }
 
-void variantTreeItem::setVariant(Variant* var)
+void VariantTreeItem::setVariant(Alg::Variant* var)
 {
     this->repVariant = var;
 }
 
-Variant* variantTreeItem::variant()
+Alg::Variant* VariantTreeItem::variant()
 {
     return this->repVariant;
 }
