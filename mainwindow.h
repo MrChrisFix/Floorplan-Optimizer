@@ -22,6 +22,7 @@ public slots:
 
 private slots:
     void ChangeTypeComboBox(Alg::Variant* var);
+    void onRequirementAdd();
 
 private:
     Ui::MainWindow *ui;

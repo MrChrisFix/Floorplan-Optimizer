@@ -29,6 +29,9 @@ void MainWindow::makeConnections()
     connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->renderArea, SLOT(onVariantChange(Alg::Variant*)));
     connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), this, SLOT(ChangeTypeComboBox(Alg::Variant*)));
 
+    connect(ui->addRequirementButton, SIGNAL(clicked(bool)), this, SLOT(onRequirementAdd()));
+    connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(Alg::Variant*)));
+
     //Menubar actions
     connect(ui->actionAdd_new_type, SIGNAL(triggered(bool)), ui->typesTree, SLOT(addNewType()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -49,4 +52,30 @@ void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
     }
 
     ui->TypeComboBox->addItems(typeList);
+}
+
+void MainWindow::onRequirementAdd()
+{
+    //Requirements tree
+    this->ui->typeRequirementsTree->addRequirement(ui->DirComboBox->currentText(), ui->TypeComboBox->currentText());
+
+    //Saving it in types
+    QTreeWidgetItem* current = this->ui->typesTree->currentItem();
+    if(current->parent() != nullptr)
+        current = current->parent();
+
+    Alg::Type* type = nullptr;
+    char side = ui->DirComboBox->currentText().toStdString()[0];
+    for(int i=0; i< ui->typesTree->topLevelItemCount(); i++)
+    {
+        if(((TypeTreeItem*) ui->typesTree->topLevelItem(i))->getType()->GetName() == ui->TypeComboBox->currentText().toStdString())
+        {
+            type = ((TypeTreeItem*) ui->typesTree->topLevelItem(i))->getType();
+            break;
+        }
+    }
+    if(type == nullptr)
+        throw; //shouldn't occure
+
+    ((TypeTreeItem*)current)->getType()->AddRequirement(side, type, true);
 }
