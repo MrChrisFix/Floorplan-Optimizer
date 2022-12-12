@@ -68,14 +68,22 @@ void TypeTreeWidget::CreateContextMenus()
 
 void TypeTreeWidget::renameType()
 {
-    this->oldTypeNameHolder = this->selectedItems()[0]->text(0);
-    this->editItem(this->selectedItems()[0], 0);
+    TypeTreeItem* item;
+    if(this->selectedItems()[0]->parent() != nullptr)
+        item = (TypeTreeItem*) this->selectedItems()[0]->parent();
+    else
+        item = (TypeTreeItem*) this->selectedItems()[0];
+    this->oldTypeNameHolder = item->text(0);
+    this->editItem(item, 0);
 }
 
 void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
 {
     //Trimming name
     changedItem->setText(0, changedItem->text(0).trimmed());
+
+    if(changedItem->text(0).size() == 0)
+        changedItem->setText(0, this->oldTypeNameHolder);
 
     //Finding duplicates
     for(int i=0; i< this->topLevelItemCount(); i++)
