@@ -31,6 +31,8 @@ set(PROJECT_SOURCES
 	typeTreeItem.cpp
 	variantTreeItem.h
 	variantTreeItem.cpp
+	requirementsTree.h
+	requirementsTree.cpp
 	XML_Management/XMLFileManager.h
 	XML_Management/XMLFileManager.cpp
 	Algorithm/AlgorithmManager.h

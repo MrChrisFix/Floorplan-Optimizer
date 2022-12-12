@@ -50,6 +50,9 @@
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
       <property name="selectionMode">
        <enum>QAbstractItemView::SingleSelection</enum>
       </property>
@@ -134,45 +137,130 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeWidget" name="typeRequirementsTree">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>150</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <column>
-       <property name="text">
-        <string notr="true">Side requirements</string>
-       </property>
-      </column>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <property name="text">
-        <string>Up</string>
-       </property>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>100</horstretch>
+          <verstretch>100</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Add new requirement</string>
+        </property>
+        <widget class="QComboBox" name="TypeComboBox">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>40</y>
+           <width>81</width>
+           <height>24</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="DirComboBox">
+         <property name="geometry">
+          <rect>
+           <x>91</x>
+           <y>40</y>
+           <width>51</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Left</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Down</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Right</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>31</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>20</y>
+           <width>49</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Direction</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="addRequirementButton">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>70</y>
+           <width>71</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </widget>
       </item>
       <item>
-       <property name="text">
-        <string>Left</string>
-       </property>
+       <widget class="RequirementsTree" name="typeRequirementsTree">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <column>
+         <property name="text">
+          <string notr="true">Side requirements</string>
+         </property>
+        </column>
+       </widget>
       </item>
-      <item>
-       <property name="text">
-        <string>Down</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Right</string>
-       </property>
-      </item>
-     </widget>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -201,7 +289,6 @@
      <string>Edit</string>
     </property>
     <addaction name="actionAdd_new_type"/>
-    <addaction name="actionAdd_new_variant"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -268,6 +355,11 @@
    <class>TypeTreeWidget</class>
    <extends>QTreeWidget</extends>
    <header>typetreewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RequirementsTree</class>
+   <extends>QTreeWidget</extends>
+   <header>requirementsTree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

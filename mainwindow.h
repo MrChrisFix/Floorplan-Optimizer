@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Algorithm/Variant.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -18,6 +19,9 @@ public:
     ~MainWindow();
 
 public slots:
+
+private slots:
+    void ChangeTypeComboBox(Alg::Variant* var);
 
 private:
     Ui::MainWindow *ui;

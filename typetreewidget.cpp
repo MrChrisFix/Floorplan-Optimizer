@@ -6,7 +6,7 @@
 
 #include <QDebug>
 
-TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget{parent}
+TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget(parent)
 {
     this->CreateContextMenus();
 
