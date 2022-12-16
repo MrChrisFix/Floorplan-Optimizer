@@ -58,6 +58,12 @@ void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
 
 void MainWindow::onRequirementAdd()
 {
+    if(ui->TypeComboBox->count() == 0)
+        return;
+
+    //TODO:
+    // Check if the requirement/type isn't already made/used
+
     //Requirements tree
     this->ui->typeRequirementsTree->addRequirement(ui->DirComboBox->currentText(), ui->TypeComboBox->currentText());
 
