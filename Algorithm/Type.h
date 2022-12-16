@@ -42,9 +42,15 @@ namespace Alg
 
         /**
          * Add new Variant to the vector
-         * @param variant The variant that shuld be added
+         * @param variant The variant that should be added
         */
         void AddVariant(Variant* variant);
+
+        /**
+         * Removes the Variant from the vector
+         * @param variant The variant that should be removed
+         */
+        void RemoveVariant(Variant* variant);
 
         /**
          * Created and add a new Variant to the vector

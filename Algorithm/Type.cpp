@@ -1,4 +1,6 @@
 #include "Type.h"
+#include <algorithm>
+
 namespace Alg {
 
     Type::Type(std::string typeName)
@@ -40,6 +42,15 @@ namespace Alg {
     {
         Variant* var = new Variant(varHeight, varWidth, this);
         this->variants.push_back(var);
+    }
+
+    void Type::RemoveVariant(Variant* variant)
+    {
+        auto it = std::find(this->variants.begin(), this->variants.end(), variant);
+        if(it != this->variants.end())
+        {
+            this->variants.erase(it);
+        }
     }
 
     void Type::AddRequirement(char side, Type* type, bool onBoth)
