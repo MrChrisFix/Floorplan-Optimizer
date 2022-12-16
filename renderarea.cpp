@@ -40,10 +40,20 @@ void RenderArea::setHeight(QString newHeight)
 void RenderArea::onVariantChange(Alg::Variant* variant)
 {
     this->currentVariant = variant;
-    this->height = variant->GetHeight();
-    this->length = variant->GetWidth();
+
+    if(variant == nullptr)
+    {
+        this->height = 1;
+        this->length = 1;
+    }
+    else
+    {
+        this->height = variant->GetHeight();
+        this->length = variant->GetWidth();
+    }
     this->heightBox->setText(QString::number(this->height));
     this->widthBox->setText(QString::number(this->length));
+
 
     this->reshapeAndDraw();
 }

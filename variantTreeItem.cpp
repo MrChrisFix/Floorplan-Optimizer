@@ -9,7 +9,14 @@ VariantTreeItem::VariantTreeItem(TypeTreeItem *parent, const QStringList &string
 
 VariantTreeItem::~VariantTreeItem()
 {
-    // this->repVariant should be deleted by Type destroctor, which will be invoked by TypeTreeItem destructor
+    if(this->parent() != nullptr)
+    {
+        ((TypeTreeItem*)this->parent())->getType()->RemoveVariant(this->repVariant);
+        delete this->repVariant;
+    }
+
+    // else
+    // this->repVariant has been deleted by Type destructor, which has been invoked by TypeTreeItem destructor
 }
 
 void VariantTreeItem::setVariant(Alg::Variant* var)

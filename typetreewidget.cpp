@@ -99,11 +99,14 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
 
 void TypeTreeWidget::deleteTreeType()
 {
+    this->lastSelected = nullptr;
+
     if(this->selectedItems()[0]->parent() != nullptr)
         delete this->selectedItems()[0]->parent();
     else
         delete this->selectedItems()[0];
     this->typeContextMenu->hide();
+
 }
 
 void TypeTreeWidget::deleteTreeVariant()
@@ -141,7 +144,8 @@ void TypeTreeWidget::addNewVariant()
     }
     while(!originalName);
     VariantTreeItem* newVariant = new VariantTreeItem((TypeTreeItem*) parentItem, QStringList(name));
-    this->selectedItems()[0]->addChild(newVariant);
+    parentItem->addChild(newVariant);
+    ((TypeTreeItem*)parentItem)->getType()->AddVariant(newVariant->variant());
 }
 
 void TypeTreeWidget::onContextMenu(const QPoint &point)
@@ -165,6 +169,12 @@ void TypeTreeWidget::SelectionChange()
 
     if(this->selectedItems().size() == 0)
     {
+        if(this->topLevelItemCount() == 0)
+        {
+            this->lastSelected = nullptr;
+            return;
+        }
+
         if(this->lastSelected != nullptr)
             this->setCurrentItem(this->lastSelected);
     }
@@ -217,6 +227,7 @@ void TypeTreeWidget::addNewType()
     //Add inifial variant
     VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
     newType->addChild(newVariant);
+    newType->getType()->AddVariant(newVariant->variant());
 
 }
 
@@ -233,7 +244,8 @@ void TypeTreeWidget::addNewType(QString name)
     TypeTreeItem* newType = new TypeTreeItem(this, QStringList(name));
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
-    //Add inifial variant
+    //Add initial variant
     VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
     newType->addChild(newVariant);
+    newType->getType()->AddVariant(newVariant->variant());
 }

@@ -18,7 +18,7 @@ RequirementsTree::RequirementsTree(QWidget *parent) : QTreeWidget(parent)
     this->contextMenu = new QMenu();
     QAction* deleteAction = new QAction("Delete", this->contextMenu);
     this->contextMenu->addAction(deleteAction);
-    connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(RemoveRequirement(QTreeWidgetItem*)));
+    //connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(RemoveRequirement(QTreeWidgetItem*)));
 
     this->currentType = nullptr;
 }
