@@ -24,6 +24,9 @@ private slots:
     void ChangeTypeComboBox(Alg::Variant* var);
     void onRequirementAdd();
 
+    void importXML();
+    void exportXML();
+
 private:
     Ui::MainWindow *ui;
     void setupTheWindow();

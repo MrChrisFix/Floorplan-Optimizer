@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "XML_Management/XMLFileManager.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,8 +37,8 @@ void MainWindow::makeConnections()
     //Menubar actions
     connect(ui->actionAdd_new_type, SIGNAL(triggered(bool)), ui->typesTree, SLOT(addNewType()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
-
-    //TODO: import and export -> QFileDialog
+    connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importXML()));
+    connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportXML()));
 }
 
 void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
@@ -78,4 +80,24 @@ void MainWindow::onRequirementAdd()
         throw; //shouldn't occure
 
     ((TypeTreeItem*)current)->getType()->AddRequirement(side, type, true);
+}
+
+
+void MainWindow::importXML()
+{
+    //QFileDialog
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Select XML"), "/", tr("XML Files (*.xml)"));
+    if(filePath.isEmpty()) return;
+    XMLFileManager XMLManager;
+    auto types = XMLManager.ReadFromXML(filePath.toStdString());
+
+    //TODO: add method to add all types to tree
+}
+void MainWindow::exportXML()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Save to XML"), "/", tr("XML Files (*.xml)"));
+    if(filePath.isEmpty()) return;
+    auto types = ui->typesTree->GetTypeVector();
+    XMLFileManager XMLManager;
+    XMLManager.SaveToXML(types, filePath.toStdString());
 }
