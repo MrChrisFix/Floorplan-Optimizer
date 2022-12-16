@@ -86,15 +86,12 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
         changedItem->setText(0, this->oldTypeNameHolder);
 
     //Finding duplicates
-    for(int i=0; i< this->topLevelItemCount(); i++)
+    auto found = this->findItems(changedItem->text(0), Qt::MatchFlag::MatchExactly, 0);
+    if(found.size() > 1)
     {
-        if(this->topLevelItem(i) == changedItem) continue;
-
-        if(this->topLevelItem(i)->text(0) == changedItem->text(0))
-        {
-            changedItem->setText(0, this->oldTypeNameHolder);
-        }
+        changedItem->setText(0, this->oldTypeNameHolder);
     }
+
 }
 
 void TypeTreeWidget::deleteTreeType()
@@ -111,6 +108,8 @@ void TypeTreeWidget::deleteTreeType()
 
 void TypeTreeWidget::deleteTreeVariant()
 {
+    this->lastSelected = nullptr;
+
     if(this->selectedItems()[0]->parent()->childCount() < 2)
         return; // Cannot delete the only existing variant of a type
     //TODO: ^^^ Add maybe some tooltip?
@@ -197,7 +196,6 @@ void TypeTreeWidget::SelectionChange()
         this->setCurrentItem(selected);
         Alg::Variant* variant = ((VariantTreeItem*) selected)->variant();
         emit variantChanged(variant);
-
     }
 }
 
@@ -224,7 +222,7 @@ void TypeTreeWidget::addNewType()
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
 
-    //Add inifial variant
+    //Add initial variant
     VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
     newType->addChild(newVariant);
     newType->getType()->AddVariant(newVariant->variant());
