@@ -24,6 +24,8 @@ public slots:
     void onChangedType(Alg::Variant* typeItem);
     bool addRequirement(QString direction, QString typeName);
     void RemoveRequirement(QTreeWidgetItem* req);
+    void onDeleteAction();
+    void onContextMenu(const QPoint &point);
 
 signals:
     void RemoveRequiremntPartner(QString); //TypeName

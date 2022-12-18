@@ -24,6 +24,7 @@ private slots:
     void ChangeTypeComboBox(Alg::Variant* var);
     void onRequirementAdd();
     void onRequirementRemove(QString);
+    void FindOptimal();
 
     void importXML();
     void exportXML();

@@ -253,6 +253,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <column>
          <property name="text">
           <string notr="true">Side requirements</string>

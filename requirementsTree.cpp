@@ -18,7 +18,8 @@ RequirementsTree::RequirementsTree(QWidget *parent) : QTreeWidget(parent)
     this->contextMenu = new QMenu();
     QAction* deleteAction = new QAction("Delete", this->contextMenu);
     this->contextMenu->addAction(deleteAction);
-    //connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(RemoveRequirement(QTreeWidgetItem*)));
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenu(QPoint)));
+    connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(onDeleteAction()));
 
     this->currentType = nullptr;
 }
@@ -27,6 +28,16 @@ RequirementsTree::~RequirementsTree()
 {
     delete this->contextMenu;
     this->currentType = nullptr;
+}
+
+void RequirementsTree::onContextMenu(const QPoint &point)
+{
+    auto item = this->itemAt(point);
+    if(item == nullptr) return;
+    if(item->parent() != nullptr) //Type clicked
+    {
+        this->contextMenu->exec(this->viewport()->mapToGlobal(point));
+    }
 }
 
 void RequirementsTree::onChangedType(Alg::Variant* newVariant)
@@ -117,6 +128,15 @@ void RequirementsTree::RemoveRequirement(QTreeWidgetItem* req)
     auto name = req->text(0);
     delete req;
     emit RemoveRequiremntPartner(name);
+}
+
+void RequirementsTree::onDeleteAction()
+{
+    auto current = this->currentItem();
+    if(current->parent() == nullptr) //Direction
+        return;
+
+    this->RemoveRequirement(current);
 }
 
 QTreeWidgetItem* RequirementsTree::isTypeAlreadyPresent(QString typeName)

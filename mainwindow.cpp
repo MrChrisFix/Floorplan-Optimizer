@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "Algorithm/AlgorithmManager.h"
 #include "XML_Management/XMLFileManager.h"
 #include <QFileDialog>
 
@@ -40,6 +41,7 @@ void MainWindow::makeConnections()
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importXML()));
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportXML()));
+    connect(ui->actionStart_optimation, SIGNAL(triggered(bool)), this, SLOT(FindOptimal()));
 }
 
 void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
@@ -108,6 +110,16 @@ void MainWindow::onRequirementRemove(QString typeName)
         throw; //shouldn't occure
 
     type->RemoveRequirement(((TypeTreeItem*)current)->getType(), true);
+}
+
+void MainWindow::FindOptimal()
+{
+    return; //TODO: remove when everything is tested
+
+    AlgorithmManager manager;
+    auto types = ui->typesTree->GetTypeVector();
+    manager.setTypes(types);
+    auto result = manager.StartCalculations();
 }
 
 void MainWindow::importXML()
