@@ -86,4 +86,51 @@ namespace Alg {
         }
     }
 
+    void Type::RemoveRequirement(Type* toRemove, bool onBoth)
+    {
+        auto it = std::find(up.begin(), up.end(), toRemove);
+        if(it != up.end())
+        {
+            up.erase(it);
+            if(onBoth)
+            {
+                toRemove->RemoveRequirement(this, false);
+            }
+            return;
+        }
+
+        it = std::find(down.begin(), down.end(), toRemove);
+        if(it != down.end())
+        {
+            down.erase(it);
+            if(onBoth)
+            {
+                toRemove->RemoveRequirement(this, false);
+            }
+            return;
+        }
+
+        it = std::find(left.begin(), left.end(), toRemove);
+        if(it != left.end())
+        {
+            left.erase(it);
+            if(onBoth)
+            {
+                toRemove->RemoveRequirement(this, false);
+            }
+            return;
+        }
+
+        it = std::find(right.begin(), right.end(), toRemove);
+        if(it != right.end())
+        {
+            right.erase(it);
+            if(onBoth)
+            {
+                toRemove->RemoveRequirement(this, false);
+            }
+            return;
+        }
+    }
+
 } //namespace end

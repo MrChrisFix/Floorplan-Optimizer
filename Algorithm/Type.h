@@ -67,6 +67,13 @@ namespace Alg
          * @param onBoth The requirement should be added on the invoked Type and given Type
         */
         void AddRequirement(char side, Type* type, bool onBoth = true);
+
+        /**
+         * Removes the given requirement from requirements vector
+         * @param toRemove The type which should be removed
+         * @param onBoth Should the other requirement delete us
+         */
+        void RemoveRequirement(Type* toRemove, bool onBoth = false);
     };
 }
 

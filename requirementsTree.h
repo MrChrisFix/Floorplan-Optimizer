@@ -15,11 +15,18 @@ private:
 
 public:
     RequirementsTree(QWidget *parent);
+    ~RequirementsTree();
+
+private:
+    QTreeWidgetItem* isTypeAlreadyPresent(QString typeName);
 
 public slots:
     void onChangedType(Alg::Variant* typeItem);
-    void addRequirement(QString direction, QString typeName);
+    bool addRequirement(QString direction, QString typeName);
     void RemoveRequirement(QTreeWidgetItem* req);
+
+signals:
+    void RemoveRequiremntPartner(QString); //TypeName
 };
 
 #endif // REQUIREMENTSTREE_H

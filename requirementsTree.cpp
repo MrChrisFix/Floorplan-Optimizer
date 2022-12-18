@@ -23,6 +23,12 @@ RequirementsTree::RequirementsTree(QWidget *parent) : QTreeWidget(parent)
     this->currentType = nullptr;
 }
 
+RequirementsTree::~RequirementsTree()
+{
+    delete this->contextMenu;
+    this->currentType = nullptr;
+}
+
 void RequirementsTree::onChangedType(Alg::Variant* newVariant)
 {
     Alg::Type* type = newVariant->GetType();
@@ -65,9 +71,20 @@ void RequirementsTree::onChangedType(Alg::Variant* newVariant)
     }
 }
 
-void RequirementsTree::addRequirement(QString direction, QString typeName)
+bool RequirementsTree::addRequirement(QString direction, QString typeName)
 {
     QTreeWidgetItem* dirItem = nullptr;
+
+    //Check if the reqirement is already in the tree
+    QTreeWidgetItem* item = this->isTypeAlreadyPresent(typeName);
+    if(item != nullptr)
+    {
+        //If present, remove the old one and if dirrenet direction, place in new place
+        if(item->parent()->text(0) != direction)
+            this->RemoveRequirement(item);
+        else
+            return false; //nothing changed
+    }
 
     if(direction.toStdString() == "Up")
     {
@@ -91,10 +108,27 @@ void RequirementsTree::addRequirement(QString direction, QString typeName)
         QTreeWidgetItem* newItem = new QTreeWidgetItem(dirItem);
         newItem->setText(0, typeName);
         dirItem->addChild(newItem);
+        return true;
     }
-
+    return false;
 }
 void RequirementsTree::RemoveRequirement(QTreeWidgetItem* req)
 {
+    auto name = req->text(0);
     delete req;
+    emit RemoveRequiremntPartner(name);
+}
+
+QTreeWidgetItem* RequirementsTree::isTypeAlreadyPresent(QString typeName)
+{
+    for(int j=0; j<this->topLevelItemCount(); j++)
+    {
+        for(int i=0; i< this->topLevelItem(j)->childCount(); i++)
+        {
+            if(this->topLevelItem(j)->child(i)->text(0) == typeName)
+                return this->topLevelItem(j)->child(i);
+        }
+    }
+
+    return nullptr;
 }

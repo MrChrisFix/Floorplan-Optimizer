@@ -32,6 +32,7 @@ void MainWindow::makeConnections()
     connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), this, SLOT(ChangeTypeComboBox(Alg::Variant*)));
 
     connect(ui->addRequirementButton, SIGNAL(clicked(bool)), this, SLOT(onRequirementAdd()));
+    connect(ui->typeRequirementsTree, SIGNAL(RemoveRequiremntPartner(QString)), this, SLOT(onRequirementRemove(QString)));
     connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(Alg::Variant*)));
 
     //Menubar actions
@@ -61,11 +62,11 @@ void MainWindow::onRequirementAdd()
     if(ui->TypeComboBox->count() == 0)
         return;
 
-    //TODO:
-    // Check if the requirement/type isn't already made/used
-
     //Requirements tree
-    this->ui->typeRequirementsTree->addRequirement(ui->DirComboBox->currentText(), ui->TypeComboBox->currentText());
+    bool sucessful;
+    sucessful = this->ui->typeRequirementsTree->addRequirement(ui->DirComboBox->currentText(), ui->TypeComboBox->currentText());
+
+    if(!sucessful) return;
 
     //Saving it in types
     QTreeWidgetItem* current = this->ui->typesTree->currentItem();
@@ -76,7 +77,7 @@ void MainWindow::onRequirementAdd()
     char side = ui->DirComboBox->currentText().toStdString()[0];
     for(int i=0; i< ui->typesTree->topLevelItemCount(); i++)
     {
-        if(((TypeTreeItem*) ui->typesTree->topLevelItem(i))->getType()->GetName() == ui->TypeComboBox->currentText().toStdString())
+        if(( (TypeTreeItem*) ui->typesTree->topLevelItem(i) )->getType()->GetName() == ui->TypeComboBox->currentText().toStdString())
         {
             type = ((TypeTreeItem*) ui->typesTree->topLevelItem(i))->getType();
             break;
@@ -88,6 +89,26 @@ void MainWindow::onRequirementAdd()
     ((TypeTreeItem*)current)->getType()->AddRequirement(side, type, true);
 }
 
+void MainWindow::onRequirementRemove(QString typeName)
+{
+    QTreeWidgetItem* current = this->ui->typesTree->currentItem();
+    if(current->parent() != nullptr)
+        current = current->parent();
+
+    Alg::Type* type = nullptr;
+    for(int i=0; i< ui->typesTree->topLevelItemCount(); i++)
+    {
+        if(( (TypeTreeItem*) ui->typesTree->topLevelItem(i) )->getType()->GetName() == typeName.toStdString())
+        {
+            type = ((TypeTreeItem*) ui->typesTree->topLevelItem(i))->getType();
+            break;
+        }
+    }
+    if(type == nullptr)
+        throw; //shouldn't occure
+
+    type->RemoveRequirement(((TypeTreeItem*)current)->getType(), true);
+}
 
 void MainWindow::importXML()
 {

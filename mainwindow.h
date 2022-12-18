@@ -23,6 +23,7 @@ public slots:
 private slots:
     void ChangeTypeComboBox(Alg::Variant* var);
     void onRequirementAdd();
+    void onRequirementRemove(QString);
 
     void importXML();
     void exportXML();
