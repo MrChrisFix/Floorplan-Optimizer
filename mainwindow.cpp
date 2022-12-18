@@ -114,12 +114,13 @@ void MainWindow::onRequirementRemove(QString typeName)
 
 void MainWindow::FindOptimal()
 {
-    return; //TODO: remove when everything is tested
+    //return; //TODO: remove when everything is tested
 
     AlgorithmManager manager;
     auto types = ui->typesTree->GetTypeVector();
     manager.setTypes(types);
     auto result = manager.StartCalculations();
+    //TODO: Show results
 }
 
 void MainWindow::importXML()
@@ -130,7 +131,7 @@ void MainWindow::importXML()
     XMLFileManager XMLManager;
     auto types = XMLManager.ReadFromXML(filePath.toStdString());
 
-    //TODO: add method to add all types to tree
+    ui->typesTree->InsertTypeVector(types);
 }
 void MainWindow::exportXML()
 {

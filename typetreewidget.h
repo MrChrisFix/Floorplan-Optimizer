@@ -21,6 +21,7 @@ public:
     ~TypeTreeWidget();
 
     std::vector<Alg::Type*> GetTypeVector();
+    void InsertTypeVector(std::vector<Alg::Type*> &types);
 
 private:
     void CreateContextMenus();
@@ -35,8 +36,6 @@ private slots:
     void addNewVariant();
 
     void SelectionChange();
-
-    //void AddRequirement(char side, QString typeName);
 
 public slots:
     void addNewType();

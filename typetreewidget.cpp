@@ -4,8 +4,6 @@
 #include "typeTreeItem.h"
 #include "variantTreeItem.h"
 
-#include <QDebug>
-
 TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget(parent)
 {
     this->CreateContextMenus();
@@ -32,6 +30,27 @@ std::vector<Alg::Type*> TypeTreeWidget::GetTypeVector()
         vec.push_back(treeType->getType());
     }
     return vec;
+}
+
+void TypeTreeWidget::InsertTypeVector(std::vector<Alg::Type*> &types)
+{
+    this->clear();
+
+    for(auto& type : types)
+    {
+        QString name = QString::fromStdString(type->GetName());
+        TypeTreeItem* typeItem = new TypeTreeItem(this, QStringList(name));
+        typeItem->setType(type);
+        this->addTopLevelItem((QTreeWidgetItem*)typeItem);
+        for(int i=0; i < type->GetVariants().size(); i++)
+        {
+            QString varName = QString("Varaint ") + QString::number(i+1);
+            VariantTreeItem* varItem = new VariantTreeItem(typeItem, QStringList(varName));
+            varItem->setVariant(type->GetVariants()[i]);
+            typeItem->addChild(varItem);
+            //typeItem->getType()->AddVariant(varItem->variant());
+        }
+    }
 }
 
 void TypeTreeWidget::CreateContextMenus()
@@ -164,8 +183,6 @@ void TypeTreeWidget::onContextMenu(const QPoint &point)
 
 void TypeTreeWidget::SelectionChange()
 {
-    //qInfo() << this->selectedItems().size();
-
     if(this->selectedItems().size() == 0)
     {
         if(this->topLevelItemCount() == 0)
@@ -223,7 +240,7 @@ void TypeTreeWidget::addNewType()
 
 
     //Add initial variant
-    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
+    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant 1"));
     newType->addChild(newVariant);
     newType->getType()->AddVariant(newVariant->variant());
 
@@ -243,7 +260,7 @@ void TypeTreeWidget::addNewType(QString name)
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
     //Add initial variant
-    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant1"));
+    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant 1"));
     newType->addChild(newVariant);
     newType->getType()->AddVariant(newVariant->variant());
 }

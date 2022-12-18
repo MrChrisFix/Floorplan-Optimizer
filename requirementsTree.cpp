@@ -4,16 +4,7 @@
 
 RequirementsTree::RequirementsTree(QWidget *parent) : QTreeWidget(parent)
 {
-    this->Up = new QTreeWidgetItem(this, QStringList("Up"));
-    this->Left = new QTreeWidgetItem(this, QStringList("Left"));
-    this->Down = new QTreeWidgetItem(this, QStringList("Down"));
-    this->Right = new QTreeWidgetItem(this, QStringList("Right"));
-    QList<QTreeWidgetItem*> list;
-    list.append(Up);
-    list.append(Left);
-    list.append(Down);
-    list.append(Right);
-    this->addTopLevelItems(list);
+    this->createBasicList();
 
     this->contextMenu = new QMenu();
     QAction* deleteAction = new QAction("Delete", this->contextMenu);
@@ -28,6 +19,22 @@ RequirementsTree::~RequirementsTree()
 {
     delete this->contextMenu;
     this->currentType = nullptr;
+}
+
+void RequirementsTree::createBasicList()
+{
+    this->clear();
+    this->Up = new QTreeWidgetItem(this, QStringList("Up"));
+    this->Left = new QTreeWidgetItem(this, QStringList("Left"));
+    this->Down = new QTreeWidgetItem(this, QStringList("Down"));
+    this->Right = new QTreeWidgetItem(this, QStringList("Right"));
+    QList<QTreeWidgetItem*> list;
+    list.append(Up);
+    list.append(Left);
+    list.append(Down);
+    list.append(Right);
+    this->addTopLevelItems(list);
+    this->expandAll();
 }
 
 void RequirementsTree::onContextMenu(const QPoint &point)
@@ -48,10 +55,7 @@ void RequirementsTree::onChangedType(Alg::Variant* newVariant)
     else if(this->currentType == type)
         return; //optimation
 
-    for(int i=0; i< this->topLevelItemCount(); i++)
-        for(int j=0; j< this->topLevelItem(i)->childCount(); j++)
-            delete this->topLevelItem(i)->child(j);
-
+    this->createBasicList();
 
     for(Alg::Type* dir: type->up)
     {

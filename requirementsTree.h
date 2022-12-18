@@ -19,6 +19,7 @@ public:
 
 private:
     QTreeWidgetItem* isTypeAlreadyPresent(QString typeName);
+    void createBasicList();
 
 public slots:
     void onChangedType(Alg::Variant* typeItem);

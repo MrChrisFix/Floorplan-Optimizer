@@ -12,6 +12,8 @@ TypeTreeItem::~TypeTreeItem()
 
 void TypeTreeItem::setType(Alg::Type* t)
 {
+    if(this->repType != nullptr)
+        delete this->repType;
     this->repType = t;
 }
 Alg::Type* TypeTreeItem::getType()
