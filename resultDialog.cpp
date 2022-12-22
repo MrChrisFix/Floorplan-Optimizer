@@ -19,7 +19,8 @@ void ResultDialog::setResults(unsigned width, unsigned height, std::vector<Alg::
     ui->height_info->setText(QString::number(height));
     ui->width_info->setText(QString::number(width));
 
-    ui->typeTable->clear();
+    ui->typeTable->clearContents();
+    ui->typeTable->setRowCount(0);
     int i=0;
     for(auto& var : combination)
     {
@@ -39,7 +40,8 @@ void ResultDialog::setResults(ResultStruct results)
     ui->height_info->setText(QString::number(results.bestHeight));
     ui->width_info->setText(QString::number(results.bestWidth));
 
-    ui->typeTable->clear();
+    ui->typeTable->clearContents();
+    ui->typeTable->setRowCount(0);
     int i=0;
     for(auto& var : results.bestCombination)
     {
