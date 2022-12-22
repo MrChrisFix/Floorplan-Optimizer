@@ -33,6 +33,9 @@ set(PROJECT_SOURCES
 	variantTreeItem.cpp
 	requirementsTree.h
 	requirementsTree.cpp
+	resultDialog.h
+	resultDialog.cpp
+	resultDialog.ui
 	XML_Management/XMLFileManager.h
 	XML_Management/XMLFileManager.cpp
 	Algorithm/AlgorithmManager.h
@@ -43,6 +46,7 @@ set(PROJECT_SOURCES
 	Algorithm/Type.cpp
 	Algorithm/Variant.h
 	Algorithm/Variant.cpp
+	Algorithm/resultStruct.h
         ${TS_FILES}
 )
 

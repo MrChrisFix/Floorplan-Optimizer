@@ -21,6 +21,8 @@ VariantTreeItem::~VariantTreeItem()
 
 void VariantTreeItem::setVariant(Alg::Variant* var)
 {
+    if(this->repVariant != nullptr)
+        delete this->repVariant;
     this->repVariant = var;
 }
 

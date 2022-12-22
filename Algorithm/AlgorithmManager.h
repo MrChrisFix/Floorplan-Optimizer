@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include "Algorithm/resultStruct.h"
 #include "Type.h"
 #include "GraphNode.h"
 #include <thread>
@@ -18,6 +19,8 @@ private:
 
 	//Calc
 	unsigned bestValue;
+    unsigned bestWidth;
+    unsigned bestHeight;
 	std::vector<Variant*> bestCombination;
 
 	//Multithreading
@@ -28,7 +31,7 @@ public:
 	AlgorithmManager();
 	~AlgorithmManager();
 
-	std::pair<unsigned,std::vector<Variant*>> StartCalculations();
+    ResultStruct StartCalculations();
 	void setTypes(std::vector<Type*> Types);
 
 private:

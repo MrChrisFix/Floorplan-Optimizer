@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "Algorithm/AlgorithmManager.h"
 #include "XML_Management/XMLFileManager.h"
 #include <QFileDialog>
 
@@ -114,13 +113,13 @@ void MainWindow::onRequirementRemove(QString typeName)
 
 void MainWindow::FindOptimal()
 {
-    //return; //TODO: remove when everything is tested
-
     AlgorithmManager manager;
     auto types = ui->typesTree->GetTypeVector();
     manager.setTypes(types);
     auto result = manager.StartCalculations();
-    //TODO: Show results
+
+    this->resultDialog.setResults(result);
+    this->resultDialog.open();
 }
 
 void MainWindow::importXML()

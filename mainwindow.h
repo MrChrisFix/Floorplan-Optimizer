@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "Algorithm/Variant.h"
+#include "Algorithm/AlgorithmManager.h"
+#include "resultDialog.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -13,6 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
+    ResultDialog resultDialog;
 
 public:
     MainWindow(QWidget *parent = nullptr);
