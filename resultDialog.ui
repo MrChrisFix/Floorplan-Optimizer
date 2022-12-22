@@ -109,7 +109,7 @@
     <rect>
      <x>10</x>
      <y>90</y>
-     <width>251</width>
+     <width>261</width>
      <height>181</height>
     </rect>
    </property>
@@ -126,7 +126,7 @@
     <number>80</number>
    </attribute>
    <attribute name="horizontalHeaderDefaultSectionSize">
-    <number>83</number>
+    <number>80</number>
    </attribute>
    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
     <bool>false</bool>

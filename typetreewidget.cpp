@@ -102,14 +102,22 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
     changedItem->setText(0, changedItem->text(0).trimmed());
 
     if(changedItem->text(0).size() == 0)
+    {
         changedItem->setText(0, this->oldTypeNameHolder);
+        return;
+    }
 
     //Finding duplicates
     auto found = this->findItems(changedItem->text(0), Qt::MatchFlag::MatchExactly, 0);
     if(found.size() > 1)
     {
         changedItem->setText(0, this->oldTypeNameHolder);
+        return;
     }
+
+    //Else: everything is good
+
+    ((TypeTreeItem*)changedItem)->getType()->setName(changedItem->text(0).toStdString());
 
 }
 
