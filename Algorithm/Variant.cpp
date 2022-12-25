@@ -30,7 +30,6 @@ namespace Alg
         return this->width;
     }
 
-
     void Variant::SetWidth(unsigned wid)
     {
         this->width = wid;

@@ -14,28 +14,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-set(TS_FILES Floorplan_Optimizer_pl_PL.ts)
-
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        renderarea.h
-        renderarea.cpp
-	ralineedit.h
-	ralineedit.cpp
-	typetreewidget.h
-	typetreewidget.cpp
-	typeTreeItem.h
-	typeTreeItem.cpp
-	variantTreeItem.h
-	variantTreeItem.cpp
-	requirementsTree.h
-	requirementsTree.cpp
+	mainwindow.cpp
+	mainwindow.h
+	mainwindow.ui
 	resultDialog.h
 	resultDialog.cpp
 	resultDialog.ui
+	UI/RenderArea/renderarea.h
+	UI/RenderArea/renderarea.cpp
+	UI/RenderArea/ralineedit.h
+	UI/RenderArea/ralineedit.cpp
+	UI/TypesTree/typetreewidget.h
+	UI/TypesTree/typetreewidget.cpp
+	UI/TypesTree/typeTreeItem.h
+	UI/TypesTree/typeTreeItem.cpp
+	UI/TypesTree/variantTreeItem.h
+	UI/TypesTree/variantTreeItem.cpp
+	UI/requirementsTree.h
+	UI/requirementsTree.cpp
 	XML_Management/XMLFileManager.h
 	XML_Management/XMLFileManager.cpp
 	Algorithm/AlgorithmManager.h
@@ -47,7 +45,6 @@ set(PROJECT_SOURCES
 	Algorithm/Variant.h
 	Algorithm/Variant.cpp
 	Algorithm/resultStruct.h
-        ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

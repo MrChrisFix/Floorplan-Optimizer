@@ -27,7 +27,6 @@ ResultStruct AlgorithmManager::StartCalculations()
 	FindOptimal();
 	auto end = std::chrono::system_clock::now();
 
-
 	auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
     ResultStruct results;
