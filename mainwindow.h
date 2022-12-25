@@ -31,6 +31,8 @@ private slots:
 
     void importXML();
     void exportXML();
+    void onNewAction();
+    void onTypeDelete();
 
 private:
     Ui::MainWindow *ui;

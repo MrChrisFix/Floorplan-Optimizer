@@ -34,6 +34,7 @@ void MainWindow::makeConnections()
     connect(ui->addRequirementButton, SIGNAL(clicked(bool)), this, SLOT(onRequirementAdd()));
     connect(ui->typeRequirementsTree, SIGNAL(RemoveRequiremntPartner(QString)), this, SLOT(onRequirementRemove(QString)));
     connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(Alg::Variant*)));
+    connect(ui->typesTree, SIGNAL(TypeDeleted()), this, SLOT(onTypeDelete()));
 
     //Menubar actions
     connect(ui->actionAdd_new_type, SIGNAL(triggered(bool)), ui->typesTree, SLOT(addNewType()));
@@ -41,6 +42,14 @@ void MainWindow::makeConnections()
     connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importXML()));
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportXML()));
     connect(ui->actionStart_optimation, SIGNAL(triggered(bool)), this, SLOT(FindOptimal()));
+    connect(ui->actionNew, SIGNAL(triggered(bool)), this, SLOT(onNewAction()));
+}
+
+void MainWindow::onNewAction()
+{
+    ui->typesTree->clear();
+    ui->typeRequirementsTree->clear();
+    ui->TypeComboBox->clear();
 }
 
 void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
@@ -71,6 +80,8 @@ void MainWindow::onRequirementAdd()
 
     //Saving it in types
     QTreeWidgetItem* current = this->ui->typesTree->currentItem();
+    if(current == nullptr) return;
+
     if(current->parent() != nullptr)
         current = current->parent();
 
@@ -93,6 +104,8 @@ void MainWindow::onRequirementAdd()
 void MainWindow::onRequirementRemove(QString typeName)
 {
     QTreeWidgetItem* current = this->ui->typesTree->currentItem();
+    if(current == nullptr) return;
+
     if(current->parent() != nullptr)
         current = current->parent();
 
@@ -139,4 +152,10 @@ void MainWindow::exportXML()
     auto types = ui->typesTree->GetTypeVector();
     XMLFileManager XMLManager;
     XMLManager.SaveToXML(types, filePath.toStdString());
+}
+
+void MainWindow::onTypeDelete()
+{
+    ui->TypeComboBox->clear();
+    ui->typeRequirementsTree->clear();
 }

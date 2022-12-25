@@ -4,7 +4,7 @@
 
 RequirementsTree::RequirementsTree(QWidget *parent) : QTreeWidget(parent)
 {
-    this->createBasicList();
+    //this->createBasicList();
 
     this->contextMenu = new QMenu();
     QAction* deleteAction = new QAction("Delete", this->contextMenu);

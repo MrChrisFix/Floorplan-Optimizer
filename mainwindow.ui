@@ -350,7 +350,7 @@
   <customwidget>
    <class>RenderArea</class>
    <extends>QWidget</extends>
-   <header>renderarea.h</header>
+   <header>UI/RenderArea/renderarea.h</header>
    <container>1</container>
    <slots>
     <slot>hor()</slot>
@@ -359,17 +359,17 @@
   <customwidget>
    <class>RALineEdit</class>
    <extends>QLineEdit</extends>
-   <header>ralineedit.h</header>
+   <header>UI/RenderArea/ralineedit.h</header>
   </customwidget>
   <customwidget>
    <class>TypeTreeWidget</class>
    <extends>QTreeWidget</extends>
-   <header>typetreewidget.h</header>
+   <header>UI/TypesTree/typetreewidget.h</header>
   </customwidget>
   <customwidget>
    <class>RequirementsTree</class>
    <extends>QTreeWidget</extends>
-   <header>requirementsTree.h</header>
+   <header>UI/requirementsTree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

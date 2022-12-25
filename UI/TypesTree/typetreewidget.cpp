@@ -16,9 +16,20 @@ TypeTreeWidget::TypeTreeWidget(QWidget *parent) : QTreeWidget(parent)
 TypeTreeWidget::~TypeTreeWidget()
 {
     if(variantContextMenu != nullptr)
+    {
+        for(auto action : variantContextMenu->actions())
+            delete action;
         delete variantContextMenu;
+        variantContextMenu = nullptr;
+    }
+
     if(typeContextMenu != nullptr)
+    {
+        for(auto action : typeContextMenu->actions())
+            delete action;
         delete typeContextMenu;
+        typeContextMenu = nullptr;
+    }
 }
 
 std::vector<Alg::Type*> TypeTreeWidget::GetTypeVector()
@@ -131,6 +142,7 @@ void TypeTreeWidget::deleteTreeType()
         delete this->selectedItems()[0];
     this->typeContextMenu->hide();
 
+    emit TypeDeleted();
 }
 
 void TypeTreeWidget::deleteTreeVariant()

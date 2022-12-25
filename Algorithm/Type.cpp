@@ -16,6 +16,15 @@ namespace Alg {
             varinat = nullptr;
         }
         this->variants.clear();
+
+        for(auto& u: up)
+            u->RemoveRequirement(this, false);
+        for(auto& d: down)
+            d->RemoveRequirement(this, false);
+        for(auto& l: left)
+            l->RemoveRequirement(this, false);
+        for(auto& r: right)
+            r->RemoveRequirement(this, false);
     }
 
     void Type::setName(std::string newName)

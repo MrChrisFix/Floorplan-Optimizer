@@ -43,6 +43,7 @@ public slots:
 
 signals:
     void variantChanged(Alg::Variant*);
+    void TypeDeleted();
 
 };
 
