@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "XML_Management/XMLFileManager.h"
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -126,8 +127,19 @@ void MainWindow::onRequirementRemove(QString typeName)
 
 void MainWindow::FindOptimal()
 {
-    AlgorithmManager manager;
     auto types = ui->typesTree->GetTypeVector();
+
+    if(types.size() == 0)
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("No types");
+        msgbox.setIcon(QMessageBox::Icon::Information);
+        msgbox.setText(QString("There are no types to optimize"));
+        msgbox.exec();
+        return;
+    }
+
+    AlgorithmManager manager;
     manager.setTypes(types);
     auto result = manager.StartCalculations();
 
@@ -141,9 +153,32 @@ void MainWindow::importXML()
     QString filePath = QFileDialog::getOpenFileName(this, tr("Select XML"), "/", tr("XML Files (*.xml)"));
     if(filePath.isEmpty()) return;
     XMLFileManager XMLManager;
-    auto types = XMLManager.ReadFromXML(filePath.toStdString());
+
+    std::vector<Alg::Type*> types;
+
+    try {
+        types = XMLManager.ReadFromXML(filePath.toStdString());
+    }
+    catch(const char* message)
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("Error");
+        msgbox.setIcon(QMessageBox::Icon::Critical);
+        msgbox.setText(QString(message));
+        msgbox.exec();
+    }
+    catch (...)
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("Error");
+        msgbox.setIcon(QMessageBox::Icon::Critical);
+        msgbox.setText(QString("Something went wrong!"));
+        msgbox.exec();
+    }
 
     ui->typesTree->InsertTypeVector(types);
+
+
 }
 void MainWindow::exportXML()
 {
