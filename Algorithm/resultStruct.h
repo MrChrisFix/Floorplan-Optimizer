@@ -6,9 +6,10 @@
 
 struct ResultStruct
 {
-    unsigned bestWidth;
-    unsigned bestHeight;
+    unsigned bestWidth = -1;
+    unsigned bestHeight = -1;
     std::vector<Alg::Variant*> bestCombination;
+    long long time_microsec = -1;
 };
 
 #endif // RESULTSTRUCT_H

@@ -33,6 +33,7 @@ ResultStruct AlgorithmManager::StartCalculations()
     results.bestHeight = this->bestHeight;
     results.bestWidth = this->bestWidth;
     results.bestCombination = this->bestCombination;
+    results.time_microsec = elapsed_us;
 
     return results;
 }

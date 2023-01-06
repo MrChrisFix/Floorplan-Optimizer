@@ -40,6 +40,25 @@ void ResultDialog::setResults(ResultStruct results)
     ui->height_info->setText(QString::number(results.bestHeight));
     ui->width_info->setText(QString::number(results.bestWidth));
 
+    QString time;
+    if(results.time_microsec > 1000000)
+    {
+        float num = results.time_microsec /1000000.0;
+        time = QString::number(num) + "s";
+    }
+    else if(results.time_microsec > 1000)
+    {
+        float num = results.time_microsec /1000.0;
+        time = QString::number(num) + "ms";
+    }
+    else
+    {
+        time = QString::number(results.time_microsec) + "µs";
+    }
+
+
+    ui->time_info->setText(time.toUtf8());
+
     ui->typeTable->clearContents();
     ui->typeTable->setRowCount(0);
     int i=0;
