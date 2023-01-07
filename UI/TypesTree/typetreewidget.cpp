@@ -1,6 +1,7 @@
 #include "typetreewidget.h"
 #include "qmenu.h"
 #include "QToolTip"
+#include "qmessagebox.h"
 #include "typeTreeItem.h"
 #include "variantTreeItem.h"
 
@@ -123,6 +124,11 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
     if(found.size() > 1)
     {
         changedItem->setText(0, this->oldTypeNameHolder);
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("Information");
+        msgbox.setIcon(QMessageBox::Icon::Information);
+        msgbox.setText(QString("A type with this name already exists"));
+        msgbox.exec();
         return;
     }
 
@@ -150,8 +156,14 @@ void TypeTreeWidget::deleteTreeVariant()
     this->lastSelected = nullptr;
 
     if(this->selectedItems()[0]->parent()->childCount() < 2)
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("Information");
+        msgbox.setIcon(QMessageBox::Icon::Information);
+        msgbox.setText(QString("Cannot remove the last variant. Each type must have at least 1 variant"));
+        msgbox.exec();
         return; // Cannot delete the only existing variant of a type
-    //TODO: ^^^ Add maybe some tooltip?
+    }
     delete this->selectedItems()[0];
     this->typeContextMenu->hide();
 }
