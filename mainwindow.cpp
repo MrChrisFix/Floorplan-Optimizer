@@ -177,9 +177,8 @@ void MainWindow::importXML()
     }
 
     ui->typesTree->InsertTypeVector(types);
-
-
 }
+
 void MainWindow::exportXML()
 {
     QString filePath = QFileDialog::getSaveFileName(this, tr("Save to XML"), "/", tr("XML Files (*.xml)"));

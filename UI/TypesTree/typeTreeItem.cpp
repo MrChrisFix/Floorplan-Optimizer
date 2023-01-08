@@ -16,6 +16,7 @@ void TypeTreeItem::setType(Alg::Type* t)
         delete this->repType;
     this->repType = t;
 }
+
 Alg::Type* TypeTreeItem::getType()
 {
     return this->repType;

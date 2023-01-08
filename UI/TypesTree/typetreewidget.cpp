@@ -60,15 +60,12 @@ void TypeTreeWidget::InsertTypeVector(std::vector<Alg::Type*> &types)
             VariantTreeItem* varItem = new VariantTreeItem(typeItem, QStringList(varName));
             varItem->setVariant(type->GetVariants()[i]);
             typeItem->addChild(varItem);
-            //typeItem->getType()->AddVariant(varItem->variant());
         }
     }
 }
 
 void TypeTreeWidget::CreateContextMenus()
 {
-    //TODO: memory management (new -> delete)
-
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->typeContextMenu = new QMenu(this);
     this->variantContextMenu = new QMenu(this);
@@ -89,12 +86,10 @@ void TypeTreeWidget::CreateContextMenus()
     connect(AddVariantAction, SIGNAL(triggered(bool)), this, SLOT(addNewVariant()));
 
 
-
     //Variant actions
     QAction* deleteVariantAction = new QAction("Delete", this->variantContextMenu);
     this->variantContextMenu->addAction(deleteVariantAction);
     connect(deleteVariantAction, SIGNAL(triggered(bool)), this, SLOT(deleteTreeVariant()));
-
 }
 
 void TypeTreeWidget::renameType()
@@ -132,10 +127,7 @@ void TypeTreeWidget::checkNewName(QTreeWidgetItem* changedItem)
         return;
     }
 
-    //Else: everything is good
-
     ((TypeTreeItem*)changedItem)->getType()->setName(changedItem->text(0).toStdString());
-
 }
 
 void TypeTreeWidget::deleteTreeType()
@@ -268,27 +260,6 @@ void TypeTreeWidget::addNewType()
 
     TypeTreeItem* newType = new TypeTreeItem(this, QStringList(name));
     newType->setFlags(newType->flags() | Qt::ItemIsEditable);
-    this->insertTopLevelItem(this->topLevelItemCount(), newType);
-
-
-    //Add initial variant
-    VariantTreeItem* newVariant = new VariantTreeItem(newType, QStringList("Variant 1"));
-    newType->addChild(newVariant);
-    newType->getType()->AddVariant(newVariant->variant());
-
-}
-
-void TypeTreeWidget::addNewType(QString name)
-{
-    if(this->findItems(name, Qt::MatchFlag::MatchExactly).size() != 0)
-    {
-        //The name already exists
-        //TODO: add some toopip that the name isn't avaliable.
-        this->addNewType();
-        return;
-    }
-
-    TypeTreeItem* newType = new TypeTreeItem(this, QStringList(name));
     this->insertTopLevelItem(this->topLevelItemCount(), newType);
 
     //Add initial variant

@@ -14,7 +14,6 @@ VariantTreeItem::~VariantTreeItem()
         ((TypeTreeItem*)this->parent())->getType()->RemoveVariant(this->repVariant);
         delete this->repVariant;
     }
-
     // else
     // this->repVariant has been deleted by Type destructor, which has been invoked by TypeTreeItem destructor
 }

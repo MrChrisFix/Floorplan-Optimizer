@@ -139,7 +139,6 @@ void RenderArea::resizeEvent(QResizeEvent * event)
         hei = this->heightBox->height();
         this->heightBox->setGeometry(x, y, wid, hei);
     }
-
 }
 
 QSize RenderArea::minimumSizeHint() const

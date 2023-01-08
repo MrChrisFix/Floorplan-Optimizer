@@ -39,12 +39,10 @@ private slots:
 
 public slots:
     void addNewType();
-    void addNewType(QString name);
 
 signals:
     void variantChanged(Alg::Variant*);
     void TypeDeleted();
-
 };
 
 #endif // TYPETREEWIDGET_H
