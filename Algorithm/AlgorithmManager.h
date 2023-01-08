@@ -2,12 +2,11 @@
 #include <string>
 #include <vector>
 #include <mutex>
-#include "Algorithm/resultStruct.h"
 #include "Type.h"
 #include "GraphNode.h"
-#include <thread>
+#include "ResultStruct.h"
 
-using namespace Alg;
+namespace FPA {
 
 class AlgorithmManager
 {
@@ -19,8 +18,8 @@ private:
 
 	//Calc
 	unsigned bestValue;
-    unsigned bestWidth;
-    unsigned bestHeight;
+	unsigned bestWidth;
+	unsigned bestHeight;
 	std::vector<Variant*> bestCombination;
 
 	//Multithreading
@@ -31,7 +30,7 @@ public:
 	AlgorithmManager();
 	~AlgorithmManager();
 
-    ResultStruct StartCalculations();
+	ResultStruct StartCalculations();
 	void setTypes(std::vector<Type*> Types);
 
 private:
@@ -47,3 +46,4 @@ private:
 	void Populate_H_Graph(GraphNode* currentNode);
 };
 
+} //namespace FPA

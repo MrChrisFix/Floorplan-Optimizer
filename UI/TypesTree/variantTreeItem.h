@@ -8,14 +8,14 @@
 class VariantTreeItem : public QTreeWidgetItem
 {
 private:
-    Alg::Variant* repVariant;    ///Representing variant
+    FPA::Variant* repVariant;    ///Representing variant
 
 public:
     VariantTreeItem(TypeTreeItem *parent, const QStringList &strings);
     ~VariantTreeItem();
 
-    void setVariant(Alg::Variant* var);
-    Alg::Variant* variant();
+    void setVariant(FPA::Variant* var);
+    FPA::Variant* variant();
 };
 
 #endif // VARIANTTREEITEM_H

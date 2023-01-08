@@ -14,7 +14,7 @@ ResultDialog::~ResultDialog()
     delete ui;
 }
 
-void ResultDialog::setResults(unsigned width, unsigned height, std::vector<Alg::Variant*> combination)
+void ResultDialog::setResults(unsigned width, unsigned height, std::vector<FPA::Variant*> combination)
 {
     ui->height_info->setText(QString::number(height));
     ui->width_info->setText(QString::number(width));
@@ -35,7 +35,7 @@ void ResultDialog::setResults(unsigned width, unsigned height, std::vector<Alg::
     }
 }
 
-void ResultDialog::setResults(ResultStruct results)
+void ResultDialog::setResults(FPA::ResultStruct results)
 {
     ui->height_info->setText(QString::number(results.bestHeight));
     ui->width_info->setText(QString::number(results.bestWidth));

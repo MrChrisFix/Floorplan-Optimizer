@@ -15,7 +15,7 @@ private:
 
     QLineEdit *widthBox, *heightBox;
 
-    Alg::Variant* currentVariant;
+    FPA::Variant* currentVariant;
 
 public:
     explicit RenderArea(QWidget *parent = nullptr);
@@ -33,7 +33,7 @@ public slots:
     void setLength(QString newLength);
     void setHeight(QString newHeight);
 
-    void onVariantChange(Alg::Variant* variant);
+    void onVariantChange(FPA::Variant* variant);
 
 };
 

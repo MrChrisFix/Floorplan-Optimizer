@@ -1,4 +1,6 @@
 #include "AlgorithmManager.h"
+#include <thread>
+namespace FPA {
 
 AlgorithmManager::AlgorithmManager()
 {
@@ -8,9 +10,9 @@ AlgorithmManager::AlgorithmManager()
 	this->Graph_H_End = new GraphNode(false, false);
 
 	this->bestValue = -1;
-    this->bestWidth = -1;
-    this->bestHeight = -1;
-    this->caltulateMultithread = false; //TODO: make as argument
+	this->bestWidth = -1;
+	this->bestHeight = -1;
+	this->caltulateMultithread = false; //TODO: make as argument
 }
 
 AlgorithmManager::~AlgorithmManager()
@@ -23,19 +25,24 @@ ResultStruct AlgorithmManager::StartCalculations()
 {
 	auto start = std::chrono::system_clock::now();
 	FixTypeConnections();
-    PopulateGraphs();
+	auto fix = std::chrono::system_clock::now();
+	PopulateGraphs();
+	auto pop = std::chrono::system_clock::now();
 	FindOptimal();
 	auto end = std::chrono::system_clock::now();
 
+	auto fix_us = std::chrono::duration_cast<std::chrono::microseconds>(fix - start).count();
+	auto pop_us = std::chrono::duration_cast<std::chrono::microseconds>(pop - fix).count();
+	auto otp_us = std::chrono::duration_cast<std::chrono::microseconds>(end - pop).count();
 	auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-    ResultStruct results;
-    results.bestHeight = this->bestHeight;
-    results.bestWidth = this->bestWidth;
-    results.bestCombination = this->bestCombination;
-    results.time_microsec = elapsed_us;
+	ResultStruct results;
+	results.bestHeight = this->bestHeight;
+	results.bestWidth = this->bestWidth;
+	results.bestCombination = this->bestCombination;
+	results.time_microsec = elapsed_us;
 
-    return results;
+	return results;
 }
 
 void AlgorithmManager::setTypes(std::vector<Type*> Types)
@@ -182,15 +189,25 @@ void AlgorithmManager::FindSinglethread(unsigned depth, std::vector<Variant*> va
 	{
 		variantStack.push_back(variant);
 
+		unsigned G_Value = this->Graph_G->calculateCost(variantStack);
+		unsigned H_Value = this->Graph_H->calculateCost(variantStack);
+		
+		if (G_Value * H_Value >= this->bestValue)
+		{
+			variantStack.pop_back();
+			continue;
+		}
+
 		if (depth == this->types.size() - 1)
 		{
-			unsigned G_Value = this->Graph_G->calculateCost(variantStack);
-			unsigned H_Value = this->Graph_H->calculateCost(variantStack);
+			//unsigned G_Value = this->Graph_G->calculateCost(variantStack);
+			//unsigned H_Value = this->Graph_H->calculateCost(variantStack);
+
 			if (G_Value * H_Value < this->bestValue)
 			{
 				this->bestValue = G_Value * H_Value;
-                this->bestHeight = G_Value;
-                this->bestWidth = H_Value;
+				this->bestHeight = G_Value;
+				this->bestWidth = H_Value;
 				this->bestCombination = variantStack;
 			}
 		}
@@ -259,10 +276,9 @@ void AlgorithmManager::CalculateCosts(std::vector<Variant*> variantStack)
 	if (this->bestValue > value)
 	{
 		this->bestValue = value;
-
-        this->bestHeight = G_Value;
-        this->bestWidth = H_Value;
 		this->bestCombination = variantStack;
 	}
 	this->guard.unlock();
 }
+
+} //namespace FPA

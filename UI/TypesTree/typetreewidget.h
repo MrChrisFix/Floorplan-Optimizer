@@ -20,8 +20,8 @@ public:
     TypeTreeWidget(QWidget *parent);
     ~TypeTreeWidget();
 
-    std::vector<Alg::Type*> GetTypeVector();
-    void InsertTypeVector(std::vector<Alg::Type*> &types);
+    std::vector<FPA::Type*> GetTypeVector();
+    void InsertTypeVector(std::vector<FPA::Type*> &types);
 
 private:
     void CreateContextMenus();
@@ -41,7 +41,7 @@ public slots:
     void addNewType();
 
 signals:
-    void variantChanged(Alg::Variant*);
+    void variantChanged(FPA::Variant*);
     void TypeDeleted();
 };
 

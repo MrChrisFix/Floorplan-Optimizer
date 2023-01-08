@@ -33,9 +33,9 @@ TypeTreeWidget::~TypeTreeWidget()
     }
 }
 
-std::vector<Alg::Type*> TypeTreeWidget::GetTypeVector()
+std::vector<FPA::Type*> TypeTreeWidget::GetTypeVector()
 {
-    std::vector<Alg::Type*> vec;
+    std::vector<FPA::Type*> vec;
     for(int i=0; i< this->topLevelItemCount(); i++)
     {
         TypeTreeItem* treeType = (TypeTreeItem*)this->topLevelItem(i);
@@ -44,7 +44,7 @@ std::vector<Alg::Type*> TypeTreeWidget::GetTypeVector()
     return vec;
 }
 
-void TypeTreeWidget::InsertTypeVector(std::vector<Alg::Type*> &types)
+void TypeTreeWidget::InsertTypeVector(std::vector<FPA::Type*> &types)
 {
     this->clear();
 
@@ -235,7 +235,7 @@ void TypeTreeWidget::SelectionChange()
 
         this->lastSelected = (VariantTreeItem*) selected;
         this->setCurrentItem(selected);
-        Alg::Variant* variant = ((VariantTreeItem*) selected)->variant();
+        FPA::Variant* variant = ((VariantTreeItem*) selected)->variant();
         emit variantChanged(variant);
     }
 }

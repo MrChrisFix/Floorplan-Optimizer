@@ -47,9 +47,9 @@ void RequirementsTree::onContextMenu(const QPoint &point)
     }
 }
 
-void RequirementsTree::onChangedType(Alg::Variant* newVariant)
+void RequirementsTree::onChangedType(FPA::Variant* newVariant)
 {
-    Alg::Type* type = newVariant->GetType();
+    FPA::Type* type = newVariant->GetType();
     if(this->currentType == nullptr || this->currentType != type)
         this->currentType = type;
     else if(this->currentType == type)
@@ -57,7 +57,7 @@ void RequirementsTree::onChangedType(Alg::Variant* newVariant)
 
     this->createBasicList();
 
-    for(Alg::Type* dir: type->up)
+    for(FPA::Type* dir: type->up)
     {
         QTreeWidgetItem* newItem = new QTreeWidgetItem(this->Up);
         newItem->setText(0, QString::fromStdString(dir->GetName()));

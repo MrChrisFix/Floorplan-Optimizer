@@ -17,7 +17,7 @@ public:
 	XMLFileManager();
 	~XMLFileManager();
 
-    std::vector<Alg::Type*> ReadFromXML(std::string path);
-    void SaveToXML(std::vector<Alg::Type*> types, std::string path);
+    std::vector<FPA::Type*> ReadFromXML(std::string path);
+    void SaveToXML(std::vector<FPA::Type*> types, std::string path);
 };
 

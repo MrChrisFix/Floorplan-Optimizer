@@ -11,7 +11,7 @@ class RequirementsTree : public QTreeWidget
 private:
     QTreeWidgetItem *Up, *Left, *Down, *Right;
     QMenu* contextMenu;
-    Alg::Type* currentType;
+    FPA::Type* currentType;
 
 public:
     RequirementsTree(QWidget *parent);
@@ -22,7 +22,7 @@ private:
     void createBasicList();
 
 public slots:
-    void onChangedType(Alg::Variant* typeItem);
+    void onChangedType(FPA::Variant* typeItem);
     bool addRequirement(QString direction, QString typeName);
     void RemoveRequirement(QTreeWidgetItem* req);
     void onDeleteAction();

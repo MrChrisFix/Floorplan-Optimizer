@@ -16,8 +16,8 @@ public:
     explicit ResultDialog(QWidget *parent = nullptr);
     ~ResultDialog();
 
-    void setResults(unsigned width, unsigned height, std::vector<Alg::Variant*> combination);
-    void setResults(ResultStruct results);
+    void setResults(unsigned width, unsigned height, std::vector<FPA::Variant*> combination);
+    void setResults(FPA::ResultStruct results);
 
 private:
     Ui::ResultDialog *ui;

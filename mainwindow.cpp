@@ -29,12 +29,12 @@ void MainWindow::makeConnections()
 {
     connect(ui->widthTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setLength(QString)));
     connect(ui->heightTextEdit, SIGNAL(textChanged(QString)), ui->renderArea, SLOT(setHeight(QString)));
-    connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->renderArea, SLOT(onVariantChange(Alg::Variant*)));
-    connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), this, SLOT(ChangeTypeComboBox(Alg::Variant*)));
+    connect(ui->typesTree, SIGNAL(variantChanged(FPA::Variant*)), ui->renderArea, SLOT(onVariantChange(FPA::Variant*)));
+    connect(ui->typesTree, SIGNAL(variantChanged(FPA::Variant*)), this, SLOT(ChangeTypeComboBox(FPA::Variant*)));
 
     connect(ui->addRequirementButton, SIGNAL(clicked(bool)), this, SLOT(onRequirementAdd()));
     connect(ui->typeRequirementsTree, SIGNAL(RemoveRequiremntPartner(QString)), this, SLOT(onRequirementRemove(QString)));
-    connect(ui->typesTree, SIGNAL(variantChanged(Alg::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(Alg::Variant*)));
+    connect(ui->typesTree, SIGNAL(variantChanged(FPA::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(FPA::Variant*)));
     connect(ui->typesTree, SIGNAL(TypeDeleted()), this, SLOT(onTypeDelete()));
 
     //Menubar actions
@@ -53,7 +53,7 @@ void MainWindow::onNewAction()
     ui->TypeComboBox->clear();
 }
 
-void MainWindow::ChangeTypeComboBox(Alg::Variant* var)
+void MainWindow::ChangeTypeComboBox(FPA::Variant* var)
 {
     ui->TypeComboBox->clear();
     QString selTypeName = QString::fromStdString(var->GetType()->GetName());
@@ -86,7 +86,7 @@ void MainWindow::onRequirementAdd()
     if(current->parent() != nullptr)
         current = current->parent();
 
-    Alg::Type* type = nullptr;
+    FPA::Type* type = nullptr;
     char side = ui->DirComboBox->currentText().toStdString()[0];
     for(int i=0; i< ui->typesTree->topLevelItemCount(); i++)
     {
@@ -110,7 +110,7 @@ void MainWindow::onRequirementRemove(QString typeName)
     if(current->parent() != nullptr)
         current = current->parent();
 
-    Alg::Type* type = nullptr;
+    FPA::Type* type = nullptr;
     for(int i=0; i< ui->typesTree->topLevelItemCount(); i++)
     {
         if(( (TypeTreeItem*) ui->typesTree->topLevelItem(i) )->getType()->GetName() == typeName.toStdString())
@@ -139,7 +139,7 @@ void MainWindow::FindOptimal()
         return;
     }
 
-    AlgorithmManager manager;
+    FPA::AlgorithmManager manager;
     manager.setTypes(types);
     auto result = manager.StartCalculations();
 
@@ -154,7 +154,7 @@ void MainWindow::importXML()
     if(filePath.isEmpty()) return;
     XMLFileManager XMLManager;
 
-    std::vector<Alg::Type*> types;
+    std::vector<FPA::Type*> types;
 
     try {
         types = XMLManager.ReadFromXML(filePath.toStdString());

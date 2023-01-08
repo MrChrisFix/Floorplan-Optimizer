@@ -37,7 +37,7 @@ void RenderArea::setHeight(QString newHeight)
     }
 }
 
-void RenderArea::onVariantChange(Alg::Variant* variant)
+void RenderArea::onVariantChange(FPA::Variant* variant)
 {
     this->currentVariant = variant;
 

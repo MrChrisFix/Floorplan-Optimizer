@@ -24,7 +24,7 @@ public:
 public slots:
 
 private slots:
-    void ChangeTypeComboBox(Alg::Variant* var);
+    void ChangeTypeComboBox(FPA::Variant* var);
     void onRequirementAdd();
     void onRequirementRemove(QString);
     void FindOptimal();
