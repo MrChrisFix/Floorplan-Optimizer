@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
 	resultDialog.h
 	resultDialog.cpp
 	resultDialog.ui
+	optOptionsDialog.h
+	optOptionsDialog.cpp
+	optOptionsDialog.ui
 	UI/RenderArea/renderarea.h
 	UI/RenderArea/renderarea.cpp
 	UI/RenderArea/ralineedit.h

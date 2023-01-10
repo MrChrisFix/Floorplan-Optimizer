@@ -4,6 +4,7 @@
 #include "Algorithm/Variant.h"
 #include "Algorithm/AlgorithmManager.h"
 #include "resultDialog.h"
+#include "optOptionsDialog.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -15,7 +16,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    ResultDialog resultDialog;
+    ResultDialog* resultDialog;
+    OptOptionsDialog* optionsDialog;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -27,6 +29,7 @@ private slots:
     void ChangeTypeComboBox(FPA::Variant* var);
     void onRequirementAdd();
     void onRequirementRemove(QString);
+    void onStartOptimization();
     void FindOptimal();
 
     void importXML();

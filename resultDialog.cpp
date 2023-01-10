@@ -7,6 +7,7 @@ ResultDialog::ResultDialog(QWidget *parent) :
     ui(new Ui::ResultDialog)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Optimization results");
 }
 
 ResultDialog::~ResultDialog()

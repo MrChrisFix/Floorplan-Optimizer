@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Floorplan Optimizer");
+    this->resultDialog = new ResultDialog(this);
+    this->optionsDialog = new OptOptionsDialog(this);
 
     this->setupTheWindow();
     this->makeConnections();
@@ -16,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete this->resultDialog;
+    delete this->optionsDialog;
     delete ui;
 }
 
@@ -37,12 +42,14 @@ void MainWindow::makeConnections()
     connect(ui->typesTree, SIGNAL(variantChanged(FPA::Variant*)), ui->typeRequirementsTree, SLOT(onChangedType(FPA::Variant*)));
     connect(ui->typesTree, SIGNAL(TypeDeleted()), this, SLOT(onTypeDelete()));
 
+    connect(this->optionsDialog, SIGNAL(accepted()), this, SLOT(FindOptimal()));
+
     //Menubar actions
     connect(ui->actionAdd_new_type, SIGNAL(triggered(bool)), ui->typesTree, SLOT(addNewType()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importXML()));
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportXML()));
-    connect(ui->actionStart_optimation, SIGNAL(triggered(bool)), this, SLOT(FindOptimal()));
+    connect(ui->actionStart_optimization, SIGNAL(triggered(bool)), this, SLOT(onStartOptimization()));
     connect(ui->actionNew, SIGNAL(triggered(bool)), this, SLOT(onNewAction()));
 }
 
@@ -125,7 +132,7 @@ void MainWindow::onRequirementRemove(QString typeName)
     type->RemoveRequirement(((TypeTreeItem*)current)->getType(), true);
 }
 
-void MainWindow::FindOptimal()
+void MainWindow::onStartOptimization()
 {
     auto types = ui->typesTree->GetTypeVector();
 
@@ -139,12 +146,22 @@ void MainWindow::FindOptimal()
         return;
     }
 
+    this->optionsDialog->open();
+}
+
+void MainWindow::FindOptimal()
+{
+    bool multiThread = this->optionsDialog->useMultithread();
+    unsigned int threaeds = this->optionsDialog->getThreadNum();
+
+    auto types = ui->typesTree->GetTypeVector();
+
     FPA::AlgorithmManager manager;
     manager.setTypes(types);
     auto result = manager.StartCalculations();
 
-    this->resultDialog.setResults(result);
-    this->resultDialog.open();
+    this->resultDialog->setResults(result);
+    this->resultDialog->open();
 }
 
 void MainWindow::importXML()

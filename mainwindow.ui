@@ -282,7 +282,7 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="separator"/>
-    <addaction name="actionStart_optimation"/>
+    <addaction name="actionStart_optimization"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
@@ -310,11 +310,6 @@
     <string>New</string>
    </property>
   </action>
-  <action name="actionOpen">
-   <property name="text">
-    <string>Open</string>
-   </property>
-  </action>
   <action name="actionImport">
    <property name="text">
     <string>Import</string>
@@ -330,19 +325,14 @@
     <string>Add new type</string>
    </property>
   </action>
-  <action name="actionAdd_new_variant">
-   <property name="text">
-    <string>Add new variant</string>
-   </property>
-  </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionStart_optimation">
+  <action name="actionStart_optimization">
    <property name="text">
-    <string>Start optimation</string>
+    <string>Start optimization</string>
    </property>
   </action>
  </widget>
