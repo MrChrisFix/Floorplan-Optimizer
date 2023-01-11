@@ -158,7 +158,19 @@ void MainWindow::FindOptimal()
 
     FPA::AlgorithmManager manager;
     manager.setTypes(types);
-    auto result = manager.StartCalculations(threads, multiThread);
+
+    FPA::ResultStruct result;
+    try{
+        result = manager.StartCalculations(threads, multiThread);
+    }
+    catch(...)
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("Critical error");
+        msgbox.setIcon(QMessageBox::Icon::Critical);
+        msgbox.setText(QString("Something went terribly wrong. Check if your types are correct, the varaints have good sizes and if the given type requirements are physicly possible"));
+        msgbox.exec();
+    }
 
     this->resultDialog->setResults(result);
     this->resultDialog->open();
