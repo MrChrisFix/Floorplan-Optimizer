@@ -5,6 +5,9 @@
 #include "Type.h"
 #include "GraphNode.h"
 #include "ResultStruct.h"
+#include <future>
+#include <chrono>
+#include <deque>
 
 namespace FPA {
 
@@ -23,14 +26,20 @@ private:
 	std::vector<Variant*> bestCombination;
 
 	//Multithreading
+	short threadNum;
+	int awaliableBufferSpace;
 	bool caltulateMultithread;
+	std::mutex bufferSizeGuard;
 	std::mutex guard;
+
+public:
+	std::deque<std::pair<int, std::vector<Variant*>>> WorkToDo;
 
 public:
 	AlgorithmManager();
 	~AlgorithmManager();
 
-	ResultStruct StartCalculations();
+	ResultStruct StartCalculations(unsigned int threads, bool multiThread = false);
 	void setTypes(std::vector<Type*> Types);
 
 private:
@@ -40,6 +49,7 @@ private:
 
 	void FindSinglethread(unsigned depth, std::vector<Variant*> variantStack);
 	void FindMultithread(unsigned depth, std::vector<Variant*> variantStack);
+	void ManageThreads();
 	void CalculateCosts(std::vector<Variant*> variantStack);
 
 	void Populate_G_Graph(GraphNode* parentNode);

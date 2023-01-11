@@ -1,5 +1,4 @@
 #include "Type.h"
-#include <algorithm>
 
 namespace FPA {
 

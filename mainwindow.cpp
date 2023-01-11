@@ -152,13 +152,13 @@ void MainWindow::onStartOptimization()
 void MainWindow::FindOptimal()
 {
     bool multiThread = this->optionsDialog->useMultithread();
-    unsigned int threaeds = this->optionsDialog->getThreadNum();
+    unsigned int threads = this->optionsDialog->getThreadNum();
 
     auto types = ui->typesTree->GetTypeVector();
 
     FPA::AlgorithmManager manager;
     manager.setTypes(types);
-    auto result = manager.StartCalculations();
+    auto result = manager.StartCalculations(threads, multiThread);
 
     this->resultDialog->setResults(result);
     this->resultDialog->open();
