@@ -232,11 +232,13 @@ void TypeTreeWidget::SelectionChange()
         {
             selected = this->selectedItems()[0];
         }
-
+        if(lastSelected != (VariantTreeItem*)selected)
+        {
+            FPA::Variant* variant = ((VariantTreeItem*) selected)->variant();
+            emit variantChanged(variant);
+        }
         this->lastSelected = (VariantTreeItem*) selected;
         this->setCurrentItem(selected);
-        FPA::Variant* variant = ((VariantTreeItem*) selected)->variant();
-        emit variantChanged(variant);
     }
 }
 
