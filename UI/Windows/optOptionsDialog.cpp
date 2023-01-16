@@ -10,7 +10,7 @@ OptOptionsDialog::OptOptionsDialog(QWidget *parent) :
 
     this->ui->radioButtonNo->setChecked(true);
     this->ui->threadAmountSlider->setDisabled(true);
-    this->ui->ThreadNumLabel->setText(QString::number(this->ui->threadAmountSlider->value()));
+    this->ui->ThreadNumLabel->setText(QString::number(this->ui->threadAmountSlider->value()) + " threads");
 
     connect(ui->threadAmountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeThreadLabel(int)));
     connect(ui->radioButtonNo, SIGNAL(toggled(bool)), this, SLOT(disableThreadSlider()));
@@ -34,7 +34,7 @@ unsigned int OptOptionsDialog::getThreadNum()
 
 void OptOptionsDialog::changeThreadLabel(int newVal)
 {
-    this->ui->ThreadNumLabel->setText(QString::number(newVal));
+    this->ui->ThreadNumLabel->setText(QString::number(newVal) + " threads");
 }
 
 void OptOptionsDialog::disableThreadSlider()

@@ -16,15 +16,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(PROJECT_SOURCES
         main.cpp
-	mainwindow.cpp
-	mainwindow.h
-	mainwindow.ui
-	resultDialog.h
-	resultDialog.cpp
-	resultDialog.ui
-	optOptionsDialog.h
-	optOptionsDialog.cpp
-	optOptionsDialog.ui
+	UI/Windows/mainwindow.cpp
+	UI/Windows/mainwindow.h
+	UI/Windows/mainwindow.ui
+	UI/Windows/resultDialog.h
+	UI/Windows/resultDialog.cpp
+	UI/Windows/resultDialog.ui
+	UI/Windows/optOptionsDialog.h
+	UI/Windows/optOptionsDialog.cpp
+	UI/Windows/optOptionsDialog.ui
 	UI/RenderArea/renderarea.h
 	UI/RenderArea/renderarea.cpp
 	UI/RenderArea/ralineedit.h
