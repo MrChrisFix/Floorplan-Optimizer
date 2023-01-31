@@ -7,6 +7,7 @@ void RectanglePlacer::AddRectangles()
 {
 	while (true)
 	{
+		counter++;
 		if (!currentNode->isStartNode())
 		{
 			if (this->plane[currentNode->GetType()] != nullptr) // this element already exists on the plane
@@ -262,6 +263,17 @@ void RectanglePlacer::calcSuggestedPtRight()
 				if (BottomRightVar != nullptr && BottomRightVar->GetHeight() < myRemainingHeight && BottomRightVar->GetHeight() > 1)
 				{
 					suggestedPt.Y = plane[currentNode->GetType()]->BottomRight().Y + 1 - BottomRightVar->GetHeight();
+				}
+
+				int bottomElementsWidth = 0;
+				for (auto el : currentNode->GetDownNodes())
+				{
+					bottomElementsWidth += configuration[el->GetType()]->GetWidth();
+				}
+				if (bottomElementsWidth > configuration[currentNode->GetType()]->GetWidth())
+				{
+					int delta = bottomElementsWidth - configuration[currentNode->GetType()]->GetWidth();
+					suggestedPt.X = plane[currentNode->GetType()]->BottomRight().X + delta;
 				}
 
 			}

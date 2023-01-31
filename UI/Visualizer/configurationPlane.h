@@ -9,6 +9,7 @@ class ConfigurationPlane : public QWidget
     Q_OBJECT
 private:
     FPA::ResultStruct _results;
+    int findMostLeft();
 
 public:
     explicit ConfigurationPlane(QWidget *parent = nullptr);
