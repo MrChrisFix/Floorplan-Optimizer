@@ -11,6 +11,8 @@ class ResultDialog;
 class ResultDialog : public QDialog
 {
     Q_OBJECT
+private:
+    FPA::ResultStruct _results;
 
 public:
     explicit ResultDialog(QWidget *parent = nullptr);

@@ -106,7 +106,7 @@ void MainWindow::onRequirementAdd()
     if(type == nullptr)
         throw; //shouldn't occure
 
-    ((TypeTreeItem*)current)->getType()->AddRequirement(side, type, true);
+    ((TypeTreeItem*)current)->getType()->AddRequirement(FPA::CharToSide(side) , type, true);
 }
 
 void MainWindow::onRequirementRemove(QString typeName)

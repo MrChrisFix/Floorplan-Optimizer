@@ -4,10 +4,7 @@ namespace FPA {
 
 AlgorithmManager::AlgorithmManager()
 {
-	this->Graph_G = new GraphNode(true, true);
-	this->Graph_H = new GraphNode(true, false);
-	this->Graph_G_End = new GraphNode(false, true);
-	this->Graph_H_End = new GraphNode(false, false);
+	this->Graphs = new PlacementGraph();
 
 	this->bestValue = -1;
 	this->bestWidth = -1;
@@ -19,8 +16,7 @@ AlgorithmManager::AlgorithmManager()
 
 AlgorithmManager::~AlgorithmManager()
 {
-	delete this->Graph_G;
-	delete this->Graph_H;
+	delete this->Graphs;
 }
 
 ResultStruct AlgorithmManager::StartCalculations(unsigned int threads, bool multiThread)
@@ -30,17 +26,19 @@ ResultStruct AlgorithmManager::StartCalculations(unsigned int threads, bool mult
 	this->awaliableBufferSpace = threads;
 
 	auto start = std::chrono::system_clock::now();
-	//FixTypeConnections();		//<- deosn't work right, correct placement should be the user's responsibility
-	PopulateGraphs();
+	this->Graphs->CreateGraph(this->types);
+
 	FindOptimal();
 	auto end = std::chrono::system_clock::now();
 
 	auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-	ResultStruct results;
+	/*ResultStruct results;
 	results.bestHeight = this->bestHeight;
 	results.bestWidth = this->bestWidth;
 	results.bestCombination = this->bestCombination;
+	results.bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);*/
+	ResultStruct results = GetResults();
 	results.time_microsec = elapsed_us;
 
 	return results;
@@ -51,123 +49,6 @@ void AlgorithmManager::setTypes(std::vector<Type*> Types)
 	this->types = Types;
 }
 
-void AlgorithmManager::Populate_G_Graph(GraphNode* currentNode)
-{
-	auto currentType = currentNode->GetType();
-
-	if (currentType == nullptr) throw;
-
-	if (currentType->down.empty())
-	{
-		currentNode->AddNodeToGraph(this->Graph_G_End);
-	}
-
-	if (currentType->up.empty())
-	{
-		this->Graph_G->AddNodeToGraph(currentNode);
-		return;
-	}
-
-	for (auto up : currentType->up)
-	{
-		auto foundUp = this->Graph_G->FindNodeByType(up); //is the type upwards already in the graph?
-		if (foundUp != nullptr)
-			foundUp->AddNodeToGraph(currentNode);
-		else
-		{
-			GraphNode* newUp = new GraphNode(up, true);
-			newUp->AddNodeToGraph(currentNode);
-			Populate_G_Graph(newUp);
-		}
-	}
-}
-
-void AlgorithmManager::Populate_H_Graph(GraphNode* currentNode)
-{
-	auto currentType = currentNode->GetType();
-
-	if (currentType == nullptr) throw;
-
-	if (currentType->right.empty())
-	{
-		currentNode->AddNodeToGraph(this->Graph_H_End);
-	}
-
-	if (currentType->left.empty())
-	{
-		this->Graph_H->AddNodeToGraph(currentNode);
-		return;
-	}
-
-	for (auto left : currentType->left)
-	{
-		auto foundLeft = this->Graph_H->FindNodeByType(left); //is the type on the left already in the graph?
-		if (foundLeft != nullptr)
-			foundLeft->AddNodeToGraph(currentNode);
-		else
-		{
-			GraphNode* newLeft = new GraphNode(left, false);
-			newLeft->AddNodeToGraph(currentNode);
-			Populate_H_Graph(newLeft);
-		}
-	}
-}
-
-void AlgorithmManager::FixTypeConnections()
-{
-	for (auto type : this->types)
-	{
-		Type* first, * second;
-
-		if (type->right.size() < 2) 
-			continue;
-
-		//Stack top-bottom the types on the right
-		auto& right = type->right;
-		first = right[0];
-		for (int i = 1; i < right.size(); i++)
-		{
-			second = right[i];
-			first->AddRequirement('D', second, true);
-			first = second;
-		}
-
-		if (type->down.size() < 2)
-			continue;
-
-		//Stack left-right the types on the bottom
-		auto& down = type->down;
-		first = down[0];
-		for (int i = 1; i < down.size(); i++)
-		{
-			second = down[i];
-			first->AddRequirement('R', second, true);
-			first = second;
-		}
-	}
-}
-
-void AlgorithmManager::PopulateGraphs()
-{
-	for (auto type : this->types)
-	{
-		//Check if the type is already in the graphs
-		if (this->Graph_G->FindNodeByType(type) != nullptr)
-			continue;
-
-		//G Graph
-		auto newNode = new GraphNode(type, true);
-		this->Populate_G_Graph(newNode);
-
-		if (this->Graph_H->FindNodeByType(type) != nullptr)
-			continue;
-
-		//H Graph
-		newNode = new GraphNode(type, false);
-		this->Populate_H_Graph(newNode);
-	}
-}
-
 void AlgorithmManager::FindOptimal()
 {
 	if (this->caltulateMultithread)
@@ -176,26 +57,28 @@ void AlgorithmManager::FindOptimal()
 	}
 	else
 	{
-		std::vector<Variant*> VariantStack;
+		std::map<Type*, Variant*> VariantStack;
 		FindSinglethread(0, VariantStack);
 	}
 }
 
-void AlgorithmManager::FindSinglethread(unsigned depth, std::vector<Variant*> variantStack)
+void AlgorithmManager::FindSinglethread(unsigned depth, std::map<Type*, Variant*> variantStack)
 {
 	for (auto variant : this->types[depth]->GetVariants())
 	{
-		variantStack.push_back(variant);
+		//variantStack.push_back(variant);
+		variantStack[types[depth]] = variant;
 
-		unsigned G_Value = this->Graph_G->calculateCost(variantStack);
-		unsigned H_Value = this->Graph_H->calculateCost(variantStack);
-		if (G_Value * H_Value >= this->bestValue)
+		auto costs = Graphs->CalculateCost(variantStack);
+		unsigned G_Value = costs.first;
+		unsigned H_Value = costs.second; 
+		if (G_Value * H_Value >= this->bestValue || G_Value == -1 || H_Value == -1)
 		{
-			variantStack.pop_back();
+			//variantStack.pop_back();
 			continue;
 		}
 
-		if (depth == this->types.size() - 1)
+		if (depth == this->types.size() - 1) //Leaf
 		{
 			if (G_Value * H_Value < this->bestValue)
 			{
@@ -210,29 +93,31 @@ void AlgorithmManager::FindSinglethread(unsigned depth, std::vector<Variant*> va
 			FindSinglethread(depth + 1, variantStack); // Going deeper into the "tree"
 		}
 
-		variantStack.pop_back();
+		//variantStack.pop_back();
 	}
+	variantStack.erase(types[depth]);
 }
 
-void AlgorithmManager::FindMultithread(unsigned depth, std::vector<Variant*> variantStack)
+void AlgorithmManager::FindMultithread(unsigned depth, std::map<Type*, Variant*> variantStack)
 {
 	for (auto variant : this->types[depth]->GetVariants())
 	{
-		variantStack.push_back(variant);
+		variantStack[types[depth]] = variant;
 
-		unsigned G_Value = this->Graph_G->calculateCost(variantStack);
-		unsigned H_Value = this->Graph_H->calculateCost(variantStack);
+		auto costs = Graphs->CalculateCost(variantStack);
+		unsigned G_Value = costs.first;
+		unsigned H_Value = costs.second;
 
 		if (G_Value * H_Value >= this->bestValue)
 		{
-			variantStack.pop_back();
+			//variantStack.pop_back();
 			continue;
 		}
 
 
-		if (depth == this->types.size() - 1)
+		if (depth == this->types.size() - 1) //Leaf
 		{
-			CalculateCosts(variantStack);
+			CalculateCostsWithMutex(variantStack);
 		}
 		else if (depth < this->types.size())
 		{
@@ -240,9 +125,9 @@ void AlgorithmManager::FindMultithread(unsigned depth, std::vector<Variant*> var
 			if (this->awaliableBufferSpace > 0)
 			{
 				awaliableBufferSpace--;
-				this->WorkToDo.push_back(std::pair<int, std::vector<Variant*>>(depth+1, variantStack));
+				this->WorkToDo.push_back(std::pair<int, std::map<Type*, Variant*>>(depth+1, variantStack));
 				this->bufferSizeGuard.unlock();
-				variantStack.pop_back();
+				//variantStack.pop_back();
 				continue;
 			}
 			else
@@ -251,7 +136,7 @@ void AlgorithmManager::FindMultithread(unsigned depth, std::vector<Variant*> var
 				FindMultithread(depth + 1, variantStack); // Going deeper into the "tree"
 			}
 		}
-		variantStack.pop_back();
+		//variantStack.pop_back();
 	}
 }
 
@@ -262,7 +147,7 @@ void AlgorithmManager::ManageThreads()
 	std::vector<std::future<void>> ThreadPool;
 	short avaliableThreads = threadNum;
 
-	std::vector<Variant*> VariantStack;
+	std::map<Type*, Variant*> VariantStack;
 	ThreadPool.push_back(std::async(std::launch::async, [this, VariantStack] {this->FindMultithread(0, VariantStack);}));
 
 	avaliableThreads--;
@@ -307,10 +192,11 @@ void AlgorithmManager::ManageThreads()
 	}
 }
 
-void AlgorithmManager::CalculateCosts(std::vector<Variant*> variantStack)
+void AlgorithmManager::CalculateCostsWithMutex(std::map<Type*, Variant*> variantStack)
 {
-	unsigned G_Value = this->Graph_G->calculateCost(variantStack);
-	unsigned H_Value = this->Graph_H->calculateCost(variantStack);
+	auto costs = Graphs->CalculateCost(variantStack);
+	unsigned G_Value = costs.first;
+	unsigned H_Value = costs.second; 
 	auto value = G_Value * H_Value;
 
 	this->guard.lock();
@@ -322,6 +208,28 @@ void AlgorithmManager::CalculateCosts(std::vector<Variant*> variantStack)
 		this->bestCombination = variantStack;
 	}
 	this->guard.unlock();
+}
+
+ResultStruct AlgorithmManager::GetResults()
+{
+	ResultStruct results;
+
+	if (bestHeight == -1)
+	{
+		results.bestHeight = 0;
+		results.bestWidth = 0;
+		results.bestCombination = std::map<Type*, Variant*>();
+		results.bestPlacement = std::map<Type*, VariantRectangle*>();
+	}
+	else
+	{
+		results.bestHeight = this->bestHeight;
+		results.bestWidth = this->bestWidth;
+		results.bestCombination = this->bestCombination;
+		results.bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);
+	}
+
+	return results;
 }
 
 } //namespace FPA
