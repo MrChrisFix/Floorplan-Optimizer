@@ -38,8 +38,12 @@ void ResultDialog::setResults(unsigned width, unsigned height, std::vector<FPA::
 
 void ResultDialog::setResults(FPA::ResultStruct results)
 {
+    this->_results = results;
+
     ui->height_info->setText(QString::number(results.bestHeight));
     ui->width_info->setText(QString::number(results.bestWidth));
+
+    ui->renderingArea->setResults(results);
 
     QString time;
     if(results.time_microsec > 1000000)
@@ -65,9 +69,9 @@ void ResultDialog::setResults(FPA::ResultStruct results)
     int i=0;
     for(auto& var : results.bestCombination)
     {
-        QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(var->GetType()->GetName()));
-        QTableWidgetItem* varWidth = new QTableWidgetItem(QString::number(var->GetWidth()));
-        QTableWidgetItem* varHeight = new QTableWidgetItem(QString::number(var->GetHeight()));
+        QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(var.first->GetName()));
+        QTableWidgetItem* varWidth = new QTableWidgetItem(QString::number(var.second->GetWidth()));
+        QTableWidgetItem* varHeight = new QTableWidgetItem(QString::number(var.second->GetHeight()));
 
         ui->typeTable->insertRow(i);
         ui->typeTable->setItem(i, 0, type);

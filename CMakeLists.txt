@@ -37,17 +37,28 @@ set(PROJECT_SOURCES
 	UI/TypesTree/variantTreeItem.cpp
 	UI/requirementsTree.h
 	UI/requirementsTree.cpp
+	UI/Visualizer/configurationPlane.h
+	UI/Visualizer/configurationPlane.cpp
 	XML_Management/XMLFileManager.h
 	XML_Management/XMLFileManager.cpp
 	Algorithm/AlgorithmManager.h
 	Algorithm/AlgorithmManager.cpp
 	Algorithm/GraphNode.h
 	Algorithm/GraphNode.cpp
+	Algorithm/PlacementGraph.cpp
+	Algorithm/PlacementGraph.h
+	Algorithm/Point.h
+	Algorithm/RectanglePlacer.cpp
+	Algorithm/RectanglePlacer.h
+	Algorithm/resultStruct.h
+	Algorithm/SideEnum.h
 	Algorithm/Type.h
 	Algorithm/Type.cpp
 	Algorithm/Variant.h
 	Algorithm/Variant.cpp
-	Algorithm/resultStruct.h
+	Algorithm/VariantRectangle.cpp
+	Algorithm/VariantRectangle.h
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -83,6 +83,11 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
     QRect rect(emptySpaceLeft, emptySpaceTop, this->drawLenght, this->drawHeight); //left, top, width, height
     QPainter painter(this);
     painter.drawRect(rect);
+    painter.drawText(rect, Qt::AlignCenter, "Center");
+    painter.drawText(rect, Qt::AlignHCenter, "Top center");
+    painter.drawText(rect, Qt::AlignHCenter | Qt::AlignBottom,  "Bottom center");
+    painter.drawText(rect, Qt::AlignVCenter, "Left center");
+    painter.drawText(rect, Qt::AlignVCenter | Qt::AlignRight, "Right center");
 }
 
 void RenderArea::resizeEvent(QResizeEvent * event)

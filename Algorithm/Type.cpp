@@ -3,6 +3,27 @@
 
 namespace FPA {
 
+
+void Type::RemoveAllRequirements()
+{
+	for (auto& req : this->up)
+	{
+		RemoveRequirement(req, true);
+	}
+	for (auto& req : this->left)
+	{
+		RemoveRequirement(req, true);
+	}
+	for (auto& req : this->down)
+	{
+		RemoveRequirement(req, true);
+	}
+	for (auto& req : this->right)
+	{
+		RemoveRequirement(req, true);
+	}
+
+}
 Type::Type(std::string typeName)
 {
 	this->name = typeName;
@@ -16,6 +37,7 @@ Type::~Type()
 		varinat = nullptr;
 	}
 	this->variants.clear();
+	this->RemoveAllRequirements();
 }
 
 void Type::setName(std::string newName)
@@ -53,29 +75,29 @@ void Type::RemoveVariant(Variant* variant)
 	}
 }
 
-void Type::AddRequirement(char side, Type* type, bool onBoth)
+void Type::AddRequirement(SIDE side, Type* type, bool onBoth)
 {
 	switch (side)
 	{
-		case 'U': case 'u':
+		case SIDE::UP:
 		{
 			this->up.push_back(type);
 			if(onBoth) type->down.push_back(this);
 			break;
 		}
-		case 'D': case 'd':
+		case SIDE::DOWN:
 		{
 			this->down.push_back(type);
 			if (onBoth) type->up.push_back(this);
 			break;
 		}
-		case 'R': case 'r':
+		case SIDE::RIGHT:
 		{
 			this->right.push_back(type);
 			if (onBoth) type->left.push_back(this);
 			break;
 		}
-		case 'L': case 'l':
+		case SIDE::LEFT:
 		{
 			this->left.push_back(type);
 			if (onBoth) type->right.push_back(this);
