@@ -29,7 +29,7 @@ void ConfigurationPlane::paintEvent(QPaintEvent *event)
 {
     int MAXDRAWSIZE = std::min(this->geometry().height(), this->geometry().width());
     const qreal FREESPACE = MAXDRAWSIZE*0.05;
-    qreal resolution = std::max(this->geometry().height(), this->geometry().width())/ MAXDRAWSIZE;
+    qreal resolution = std::max(this->geometry().height(), this->geometry().width()) *1.0/ MAXDRAWSIZE;
     MAXDRAWSIZE -= 2 * FREESPACE;
 
     qreal drawLenght, drawHeight;
@@ -57,7 +57,7 @@ void ConfigurationPlane::paintEvent(QPaintEvent *event)
     const qreal HEIGHT_SCALE = drawHeight/this->_results.bestHeight;
 
     QPainter painter(this);
-    painter.translate(FREESPACE + findMostLeft(), FREESPACE);
+    painter.translate(FREESPACE - findMostLeft()*WIDTH_SCALE, FREESPACE); //TODO: Test_2.xml is not showing up correctly
     for(auto& rect : this->_results.bestPlacement)
     {
         auto tl = rect.second->TopLeft();
