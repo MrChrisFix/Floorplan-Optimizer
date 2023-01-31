@@ -13,6 +13,17 @@ ConfigurationPlane::~ConfigurationPlane()
 
 }
 
+int ConfigurationPlane::findMostLeft()
+{
+    int min = 0;
+    for(auto& el : _results.bestPlacement)
+    {
+        if(el.second->TopLeft().X < min)
+            min = el.second->TopLeft().X;
+    }
+    return min;
+}
+
 
 void ConfigurationPlane::paintEvent(QPaintEvent *event)
 {
@@ -46,8 +57,8 @@ void ConfigurationPlane::paintEvent(QPaintEvent *event)
     const qreal HEIGHT_SCALE = drawHeight/this->_results.bestHeight;
 
     QPainter painter(this);
-    painter.translate(FREESPACE, FREESPACE);
-    for(auto rect : this->_results.bestPlacement)
+    painter.translate(FREESPACE + findMostLeft(), FREESPACE);
+    for(auto& rect : this->_results.bestPlacement)
     {
         auto tl = rect.second->TopLeft();
         auto var = rect.second->GetVariant();

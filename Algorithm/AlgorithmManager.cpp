@@ -69,17 +69,22 @@ void AlgorithmManager::FindSinglethread(unsigned depth, std::map<Type*, Variant*
 		//variantStack.push_back(variant);
 		variantStack[types[depth]] = variant;
 
-		auto costs = Graphs->CalculateCost(variantStack);
-		unsigned G_Value = costs.first;
-		unsigned H_Value = costs.second; 
-		if (G_Value * H_Value >= this->bestValue || G_Value == -1 || H_Value == -1)
-		{
-			//variantStack.pop_back();
-			continue;
-		}
+		//auto costs = Graphs->CalculateCost(variantStack);
+		//unsigned G_Value = costs.first;
+		//unsigned H_Value = costs.second; 
+		//if (G_Value * H_Value >= this->bestValue || G_Value == -1 || H_Value == -1)
+		//{
+		//	//variantStack.pop_back();
+		//	continue;
+		//}
 
 		if (depth == this->types.size() - 1) //Leaf
 		{
+			//TODO: earlier
+			auto costs = Graphs->CalculateCost(variantStack);
+			unsigned G_Value = costs.first;
+			unsigned H_Value = costs.second; 
+			if (H_Value == -1) continue;
 			if (G_Value * H_Value < this->bestValue)
 			{
 				this->bestValue = G_Value * H_Value;
