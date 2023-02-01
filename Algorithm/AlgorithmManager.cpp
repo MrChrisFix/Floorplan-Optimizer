@@ -19,7 +19,7 @@ AlgorithmManager::~AlgorithmManager()
 	delete this->Graphs;
 }
 
-ResultStruct AlgorithmManager::StartCalculations(unsigned int threads, bool multiThread)
+ResultStruct* AlgorithmManager::StartCalculations(unsigned int threads, bool multiThread)
 {
 	this->caltulateMultithread = multiThread;
 	this->threadNum = threads;
@@ -38,8 +38,8 @@ ResultStruct AlgorithmManager::StartCalculations(unsigned int threads, bool mult
 	results.bestWidth = this->bestWidth;
 	results.bestCombination = this->bestCombination;
 	results.bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);*/
-	ResultStruct results = GetResults();
-	results.time_microsec = elapsed_us;
+	ResultStruct* results = GetResults();
+	results->time_microsec = elapsed_us;
 
 	return results;
 }
@@ -215,24 +215,24 @@ void AlgorithmManager::CalculateCostsWithMutex(std::map<Type*, Variant*> variant
 	this->guard.unlock();
 }
 
-ResultStruct AlgorithmManager::GetResults()
+ResultStruct* AlgorithmManager::GetResults()
 {
-	ResultStruct results;
+	ResultStruct* results = new ResultStruct();
 
 	if (bestHeight == -1)
 	{
-		results.bestHeight = 0;
-		results.bestWidth = 0;
-		results.bestCombination = std::map<Type*, Variant*>();
-		results.bestPlacement = std::map<Type*, VariantRectangle*>();
+		results->bestHeight = 0;
+		results->bestWidth = 0;
+		results->bestCombination = std::map<Type*, Variant*>();
+		results->bestPlacement = std::map<Type*, VariantRectangle*>();
 	}
 	else
 	{
-		results.bestHeight = this->bestHeight;
-		results.bestWidth = this->bestWidth;
-		results.bestCombination = this->bestCombination;
-		results.bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);
-	}
+		results->bestHeight = this->bestHeight;
+		results->bestWidth = this->bestWidth;
+		results->bestCombination = this->bestCombination;
+		results->bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);
+	}		   
 
 	return results;
 }

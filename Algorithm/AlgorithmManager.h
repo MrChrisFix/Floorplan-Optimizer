@@ -40,7 +40,7 @@ public:
 	AlgorithmManager();
 	~AlgorithmManager();
 
-	ResultStruct StartCalculations(unsigned int threads, bool multiThread = false);
+	ResultStruct* StartCalculations(unsigned int threads, bool multiThread = false);
 	void setTypes(std::vector<Type*> Types);
 
 private:
@@ -53,7 +53,7 @@ private:
 	void ManageThreads();
 	void CalculateCostsWithMutex(std::map<Type*, Variant*> variantStack);
 
-	ResultStruct GetResults();
+	ResultStruct* GetResults();
 };
 
 } //namespace FPA

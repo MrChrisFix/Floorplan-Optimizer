@@ -1,7 +1,7 @@
 #ifndef RESULTDIALOG_H
 #define RESULTDIALOG_H
 
-#include "Algorithm/resultStruct.h"
+#include "Algorithm/ResultStruct.h"
 #include <QDialog>
 
 namespace Ui {
@@ -12,14 +12,13 @@ class ResultDialog : public QDialog
 {
     Q_OBJECT
 private:
-    FPA::ResultStruct _results;
+    FPA::ResultStruct* _results;
 
 public:
     explicit ResultDialog(QWidget *parent = nullptr);
     ~ResultDialog();
 
-    void setResults(unsigned width, unsigned height, std::vector<FPA::Variant*> combination);
-    void setResults(FPA::ResultStruct results);
+    void setResults(FPA::ResultStruct* results);
 
 private:
     Ui::ResultDialog *ui;

@@ -159,7 +159,7 @@ void MainWindow::FindOptimal()
     FPA::AlgorithmManager manager;
     manager.setTypes(types);
 
-    FPA::ResultStruct result;
+    FPA::ResultStruct* result = nullptr;
     try{
         result = manager.StartCalculations(threads, multiThread);
     }
@@ -170,6 +170,18 @@ void MainWindow::FindOptimal()
         msgbox.setIcon(QMessageBox::Icon::Critical);
         msgbox.setText(QString("Something went terribly wrong. Check if your types are correct, the varaints have good sizes and if the given type requirements are physicly possible"));
         msgbox.exec();
+    }
+
+
+
+    if(result->bestCombination.empty())
+    {
+        QMessageBox msgbox;
+        msgbox.setWindowTitle("No solution");
+        msgbox.setIcon(QMessageBox::Icon::Warning);
+        msgbox.setText(QString("No solution could be found. The given scenario is impossible or is too complicated"));
+        msgbox.exec();
+        return;
     }
 
     this->resultDialog->setResults(result);
