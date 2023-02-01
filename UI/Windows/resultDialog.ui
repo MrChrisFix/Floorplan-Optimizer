@@ -215,10 +215,28 @@
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>30</y>
+     <y>40</y>
      <width>591</width>
-     <height>421</height>
+     <height>411</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>10</y>
+     <width>601</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Proposed arrangement of elements</string>
    </property>
   </widget>
  </widget>

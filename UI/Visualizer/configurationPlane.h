@@ -1,21 +1,21 @@
 #ifndef CONFIGURATIONPLANE_H
 #define CONFIGURATIONPLANE_H
 
-#include "Algorithm/resultStruct.h"
+#include "Algorithm/ResultStruct.h"
 #include <QWidget>
 
 class ConfigurationPlane : public QWidget
 {
     Q_OBJECT
 private:
-    FPA::ResultStruct _results;
+    FPA::ResultStruct* _results;
     int findMostLeft();
 
 public:
     explicit ConfigurationPlane(QWidget *parent = nullptr);
     ~ConfigurationPlane();
 
-    void setResults(FPA::ResultStruct results);
+    void setResults(FPA::ResultStruct* results);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
