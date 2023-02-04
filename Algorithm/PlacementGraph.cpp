@@ -1,5 +1,6 @@
 #include "PlacementGraph.h"
 #include "RectanglePlacer.h"
+#include <algorithm>
 namespace FPA {
 
 PlacementGraph::PlacementGraph()
@@ -55,6 +56,171 @@ unsigned PlacementGraph::calculateHGraph(std::map<Type*, VariantRectangle*>& pla
 			Hmax = plane[ender->GetType()]->TopRight().X;
 	}
 	return Hmax - Hmin;
+}
+
+unsigned PlacementGraph::calculateUncompleteGGraph(std::map<Type*, Variant*>& configuration, GraphNode* startNode)
+{
+	if (startNode->isEnd)
+		return 0;
+
+	unsigned max = 0;
+	for (auto node : startNode->down)
+	{
+		unsigned myCost = 0;
+		if (!node->isRoot)
+		{
+			Variant* var = configuration[node->GetType()];
+			if(var != nullptr)
+				myCost = var->GetHeight();
+		}
+		unsigned cost = calculateUncompleteGGraph(configuration, node) + myCost;
+		if (cost > max)
+			max = cost;
+	}
+
+	return max;
+}
+
+unsigned PlacementGraph::calculateUncompleteHGraph(std::map<Type*, Variant*>& configuration, GraphNode* startNode)
+{
+	if (startNode->isEnd)
+		return 0;
+
+	unsigned max = 0;
+	for (auto node : startNode->right)
+	{
+		unsigned myCost = 0;
+		if (!node->isRoot)
+		{
+			Variant* var = configuration[node->GetType()];
+			if (var != nullptr)
+				myCost = var->GetWidth();
+		}
+		unsigned cost = calculateUncompleteHGraph(configuration, node) + myCost;
+		if (cost > max)
+			max = cost;
+	}
+
+	return max;
+}
+
+void PlacementGraph::changeOrdersOnSites()
+{
+	for (auto& graph : this->TypeLookup)
+	{
+		if(graph.second->up.size() > 1)
+		{
+			correctTopBottom(graph.second, graph.second->up);
+		}
+
+		if(graph.second->left.size() > 1)
+		{
+			correctLeftRight(graph.second, graph.second->left);
+		}
+
+		if (graph.second->down.size() > 1)
+		{
+			correctTopBottom(graph.second, graph.second->down);
+		}
+
+		if (graph.second->right.size() > 1)
+		{
+			correctLeftRight(graph.second, graph.second->right);
+		}
+	}
+
+}
+
+void PlacementGraph::correctLeftRight(GraphNode* node, std::vector<GraphNode*>& dirVec)
+{
+	std::vector<GraphNode*> newVec;
+
+	//1. Find the first
+	for (int i = 0; i < dirVec.size(); i++)
+	{
+		bool found = true;
+		auto current = dirVec[i];
+
+		for (auto& di : dirVec)
+		{
+			auto id = std::find(current->up.begin(), current->up.end(), di);
+			if (id != current->up.end())
+			{
+				found = false;
+				break;
+			}
+		}
+		if (found)
+		{
+			newVec.push_back(current);
+			break;
+		}
+	}
+
+	// 2. Traverse now having an anchor point
+	for (int i = 0; i < dirVec.size()-1; )
+	{
+		int old_i = i;
+		for (auto& di : dirVec)
+		{
+			auto id = std::find(di->up.begin(), di->up.end(), newVec[i]);
+			if (id != di->up.end())
+			{
+				newVec.push_back(di);
+				i++;
+				break;
+			}
+		}
+		if (i == old_i)
+			throw "Elements are not connected near element " + node->GetType()->GetName();
+	}
+	dirVec = newVec;
+}
+
+void PlacementGraph::correctTopBottom(GraphNode* node, std::vector<GraphNode*> &dirVec)
+{
+	std::vector<GraphNode*> newVec;
+
+	//1. Find the first
+	for (int i = 0; i < dirVec.size(); i++)
+	{
+		bool found = true;
+		auto current = dirVec[i];
+
+		for (auto& di : dirVec)
+		{
+			auto id = std::find(current->left.begin(), current->left.end(), di);
+			if (id != current->left.end())
+			{
+				found = false;
+				break;
+			}
+		}
+		if (found)
+		{
+			newVec.push_back(current);
+			break;
+		}
+	}
+
+	// 2. Traverse now having an anchor point
+	for (int i = 0; i < dirVec.size()-1; )
+	{
+		int old_i = i;
+		for (auto& di : dirVec)
+		{
+			auto id = std::find(di->left.begin(), di->left.end(), newVec[i]);
+			if (id != di->left.end())
+			{
+				newVec.push_back(di);
+				i++;
+				break;
+			}
+		}
+		if (i == old_i)
+			throw "Elements are not connected near element " + node->GetType()->GetName();
+	}
+	dirVec = newVec;
 }
 
 void PlacementGraph::CreateGraph(std::vector<Type*> types)
@@ -115,19 +281,37 @@ void PlacementGraph::CreateGraph(std::vector<Type*> types)
 		if (type->up.empty())
 			node->ConnectWithNode(G_start, SIDE::UP);
 	}
+
+	changeOrdersOnSites();
 }
 
-std::pair<unsigned, unsigned> PlacementGraph::CalculateCost(std::map<Type*, Variant*> configuration)
+std::pair<unsigned, unsigned> PlacementGraph::CalculateCost(std::map<Type*, Variant*> &configuration)
 {
-	std::map<Type*, VariantRectangle*> rectanglePlane = GetRectanglePlane(configuration);
-	if (rectanglePlane.empty())
+	unsigned G = -1, H = -1;
+	if (configuration.size() < TypeLookup.size())
 	{
-		return std::pair<unsigned, unsigned>(-1, -1);
+		auto copy = configuration; //The copy is added, becouse the conf is passed by reference (for speed) and is obscured by it
+		G = this->calculateUncompleteGGraph(copy, G_start);
+		H = this->calculateUncompleteHGraph(copy, H_start);
 	}
+	else
+	{
+		std::map<Type*, VariantRectangle*> rectanglePlane = GetRectanglePlane(configuration);
+		if (rectanglePlane.empty())
+		{
+			G = -1;
+			H = -1;
+		}
+		else
+		{
+			G = this->calculateGGraph(rectanglePlane);
+			H = this->calculateHGraph(rectanglePlane);
 
+			for (auto& rect : rectanglePlane)
+				delete rect.second;
+		}
 
-	auto G = this->calculateGGraph(rectanglePlane);
-	auto H = this->calculateHGraph(rectanglePlane);
+	}
 
 	return std::pair<unsigned, unsigned>(G, H);
 }
