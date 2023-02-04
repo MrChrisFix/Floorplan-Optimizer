@@ -11,7 +11,7 @@ AlgorithmManager::AlgorithmManager()
 	this->bestHeight = -1;
 	this->caltulateMultithread = false;
 	this->threadNum = 0;
-	this->awaliableBufferSpace = 0;
+	this->availableBufferSpace = 0;
 }
 
 AlgorithmManager::~AlgorithmManager()
@@ -23,7 +23,7 @@ ResultStruct* AlgorithmManager::StartCalculations(unsigned int threads, bool mul
 {
 	this->caltulateMultithread = multiThread;
 	this->threadNum = threads;
-	this->awaliableBufferSpace = threads;
+	this->availableBufferSpace = threads;
 
 	auto start = std::chrono::system_clock::now();
 	this->Graphs->CreateGraph(this->types);
@@ -33,11 +33,6 @@ ResultStruct* AlgorithmManager::StartCalculations(unsigned int threads, bool mul
 
 	auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-	/*ResultStruct results;
-	results.bestHeight = this->bestHeight;
-	results.bestWidth = this->bestWidth;
-	results.bestCombination = this->bestCombination;
-	results.bestPlacement = this->Graphs->GetRectanglePlane(this->bestCombination);*/
 	ResultStruct* results = GetResults();
 	results->time_microsec = elapsed_us;
 
@@ -66,25 +61,18 @@ void AlgorithmManager::FindSinglethread(unsigned depth, std::map<Type*, Variant*
 {
 	for (auto variant : this->types[depth]->GetVariants())
 	{
-		//variantStack.push_back(variant);
 		variantStack[types[depth]] = variant;
 
-		//auto costs = Graphs->CalculateCost(variantStack);
-		//unsigned G_Value = costs.first;
-		//unsigned H_Value = costs.second; 
-		//if (G_Value * H_Value >= this->bestValue || G_Value == -1 || H_Value == -1)
-		//{
-		//	//variantStack.pop_back();
-		//	continue;
-		//}
+		auto costs = Graphs->CalculateCost(variantStack);
+		unsigned G_Value = costs.first;
+		unsigned H_Value = costs.second; 
+		if (G_Value * H_Value >= this->bestValue || G_Value == -1 || H_Value == -1)
+		{
+			continue;
+		}
 
 		if (depth == this->types.size() - 1) //Leaf
 		{
-			//TODO: earlier
-			auto costs = Graphs->CalculateCost(variantStack);
-			unsigned G_Value = costs.first;
-			unsigned H_Value = costs.second; 
-			if (H_Value == -1) continue;
 			if (G_Value * H_Value < this->bestValue)
 			{
 				this->bestValue = G_Value * H_Value;
@@ -97,8 +85,6 @@ void AlgorithmManager::FindSinglethread(unsigned depth, std::map<Type*, Variant*
 		{
 			FindSinglethread(depth + 1, variantStack); // Going deeper into the "tree"
 		}
-
-		//variantStack.pop_back();
 	}
 	variantStack.erase(types[depth]);
 }
@@ -112,10 +98,8 @@ void AlgorithmManager::FindMultithread(unsigned depth, std::map<Type*, Variant*>
 		auto costs = Graphs->CalculateCost(variantStack);
 		unsigned G_Value = costs.first;
 		unsigned H_Value = costs.second;
-
-		if (G_Value * H_Value >= this->bestValue)
+		if (G_Value * H_Value >= this->bestValue || H_Value == -1)
 		{
-			//variantStack.pop_back();
 			continue;
 		}
 
@@ -127,12 +111,11 @@ void AlgorithmManager::FindMultithread(unsigned depth, std::map<Type*, Variant*>
 		else if (depth < this->types.size())
 		{
 			this->bufferSizeGuard.lock();
-			if (this->awaliableBufferSpace > 0)
+			if (this->availableBufferSpace > 0)
 			{
-				awaliableBufferSpace--;
+				availableBufferSpace--;
 				this->WorkToDo.push_back(std::pair<int, std::map<Type*, Variant*>>(depth+1, variantStack));
 				this->bufferSizeGuard.unlock();
-				//variantStack.pop_back();
 				continue;
 			}
 			else
@@ -141,8 +124,8 @@ void AlgorithmManager::FindMultithread(unsigned depth, std::map<Type*, Variant*>
 				FindMultithread(depth + 1, variantStack); // Going deeper into the "tree"
 			}
 		}
-		//variantStack.pop_back();
 	}
+	variantStack.erase(types[depth]);
 }
 
 void AlgorithmManager::ManageThreads()
@@ -167,11 +150,11 @@ void AlgorithmManager::ManageThreads()
 			ThreadPool.push_back(
 				std::async(
 					std::launch::async, [this, depth, stack] {this->FindMultithread(depth, stack); }));
-			WorkToDo.pop_front();
-			avaliableThreads--;
 
+			avaliableThreads--;
 			this->bufferSizeGuard.lock();
-			this->awaliableBufferSpace++;
+			WorkToDo.pop_front();
+			this->availableBufferSpace++;
 			this->bufferSizeGuard.unlock();
 		}
 
@@ -205,7 +188,7 @@ void AlgorithmManager::CalculateCostsWithMutex(std::map<Type*, Variant*> variant
 	auto value = G_Value * H_Value;
 
 	this->guard.lock();
-	if (this->bestValue > value)
+	if (this->bestValue > value && H_Value != -1)
 	{
 		this->bestValue = value;
 		this->bestHeight = G_Value;

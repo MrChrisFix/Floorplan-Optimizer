@@ -6,7 +6,7 @@ namespace FPA
 void RectanglePlacer::AddRectangles()
 {
 	while (true)
-    {
+	{
 		if (!currentNode->isStartNode())
 		{
 			if (this->plane[currentNode->GetType()] != nullptr) // this element already exists on the plane
@@ -21,6 +21,7 @@ void RectanglePlacer::AddRectangles()
 			{
 				CreateRectangle();
 			}
+
 		}
 
 
@@ -126,28 +127,11 @@ void RectanglePlacer::CreateRectangle()
 RectanglePlacer::~RectanglePlacer()
 {
 	this->startNode = nullptr;
-}
-
-
-std::map<Type*, VariantRectangle*> RectanglePlacer::GetPlacedRectangles()
-{
-	if (goodConfigurationState())
+	if (this->blankVariant != nullptr)
 	{
-		currentNode = startNode;
-		AddRectangles();
+		delete blankVariant;
+		blankVariant = nullptr;
 	}
-
-	if (isAnythingIntersecting())
-	{
-		for (auto& el : plane)
-		{
-			delete el.second;
-			el.second = nullptr;
-		}
-		return std::map<Type*, VariantRectangle*>();
-	}
-
-	return this->plane;
 }
 
 bool RectanglePlacer::allowedToGoDown()
@@ -181,10 +165,10 @@ bool RectanglePlacer::willFitAllElements(Type* type)
 		return false;
 
 	//Checks if N-1 elements fit on the side, so that the N-th element can also fit and eventually be much oversized
-	int rightVariantsHeight = 0;
-	int downVariantsWidth = 0;
-	int leftVariantsHeight = 0;
-	int upVariantsWidth = 0;
+	unsigned int rightVariantsHeight = 0;
+	unsigned int downVariantsWidth = 0;
+	unsigned int leftVariantsHeight = 0;
+	unsigned int upVariantsWidth = 0;
 	for (int i=0; i< type->right.size()-2 && type->right.size() > 1; i++)
 	{
 		Variant* var = configuration[type->right[i]];
@@ -230,8 +214,6 @@ bool RectanglePlacer::willFitAllElements(Type* type)
 	bool rightGood = type->right.size() == 2 && rightVariantsHeight > nodeVariant->GetHeight() ||
 		rightVariantsHeight < nodeVariant->GetHeight();
 
-	//TODO!!!: This doens't take in consideration the elements, that are on the border
-
 	return (upGood && downGood && leftGood && rightGood);
 }
 
@@ -249,12 +231,6 @@ void RectanglePlacer::calcSuggestedPtRight()
 		{
 			Type* lastBottom = currentNode->GetRightNodes()[currentRightIndex - 1]->GetType();
 			suggestedPt.Y = plane[lastBottom]->BottomLeft().Y;
-
-			/*if (plane[lastBottom]->GetVariant()->GetHeight() >= configuration[currentNode->GetType()]->GetHeight())
-			{
-				int delta = 1 + plane[lastBottom]->BottomLeft().Y - plane[currentNode->GetType()]->BottomRight().Y;
-				plane[currentNode->GetType()]->MoveYAxis(delta);
-			}*/
 		}
 
 		//Check if the most down right is shared with the element down most right - ergo 2 on left sharing 1 on right
@@ -278,9 +254,10 @@ void RectanglePlacer::calcSuggestedPtRight()
 				int bottomElementsWidth = 0;
 				for (auto el : currentNode->GetDownNodes())
 				{
-					bottomElementsWidth += configuration[el->GetType()]->GetWidth();
+					if(configuration[el->GetType()] != nullptr)
+						bottomElementsWidth += configuration[el->GetType()]->GetWidth();
 				}
-				if (bottomElementsWidth > configuration[currentNode->GetType()]->GetWidth())
+				if (configuration[currentNode->GetType()] != nullptr && bottomElementsWidth > configuration[currentNode->GetType()]->GetWidth())
 				{
 					int delta = bottomElementsWidth - configuration[currentNode->GetType()]->GetWidth();
 
@@ -331,6 +308,28 @@ void RectanglePlacer::calcSuggestedPtDown()
 		}
 	}
 }
+
+std::map<Type*, VariantRectangle*> RectanglePlacer::GetPlacedRectangles()
+{
+	if (goodConfigurationState())
+	{
+		currentNode = startNode;
+		AddRectangles();
+	}
+
+	if (isAnythingIntersecting())
+	{
+		for (auto& el : plane)
+		{
+			delete el.second;
+			el.second = nullptr;
+		}
+		return std::map<Type*, VariantRectangle*>();
+	}
+
+	return this->plane;
+}
+
 
 bool RectanglePlacer::isAnythingIntersecting()
 {
